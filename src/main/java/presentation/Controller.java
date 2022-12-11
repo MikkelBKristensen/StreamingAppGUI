@@ -1,6 +1,5 @@
 package presentation;
 
-import domain.Media;
 import domain.*;
 import exceptions.FileNotLoadedException;
 import exceptions.FileNotSavedException;
@@ -10,19 +9,23 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashSet;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -194,14 +197,19 @@ public class Controller implements Initializable {
 
 
 
+    //TODO The commented out code doesn't work as intentional. It only clears the pane when used with empty searchField. With any input, it does nothing(Seemingly).
     @FXML
-    public void search(MouseEvent event) {
-        /*searchedName = searchTextField.getText();
-        for (Media media : mediaCollection) {
-            currentMediaCollection.add(media);
+    public void search(MouseEvent event) throws MediaNotInArrayException {
+        /*String searchedName = searchTextField.getText();
+        //Set activeMediaList = new collection with all activeMediaList.getMedia().getTitle().contains(searcedName)
+        List<String> listOfMedia = new ArrayList<>();
+        for (Media media : activeMediaList.getMedia()) {
+            if (media.getTitle().contains(searchedName)) {
+                listOfMedia.add(media.getTitle());
+            }
         }
-        for (Media media : currentMediaCollection) {
-        }*/
+        activeMediaList = activeMediaList.getCollectionByName(listOfMedia);
+        redrawMediaPane(mediaPane);*/
     }
 
     @FXML
@@ -221,11 +229,11 @@ public class Controller implements Initializable {
             "Rating (Highest first)", "Rating (Lowest first)", "Release year (Newest first)", "Release year (Oldest first)"};
     private final String[] profileOptions = {"Save profile", "Change profile"};
     //TODO change genres to a HashMap that is filled by looping over all media
-    private final String[] genres = new String[]{"All Genres", "Action","Adventure","Biography","Comedy","Crime","Drama",
+    private final String[] genres = new String[]{"All Genres","Action","Adventure","Biography","Comedy","Crime","Drama",
+
             "Family","Fantasy","Film-Noir","History","Horror","Music","Musical","Mystery","Romance","Sci-Fi",
             "Sport","Talk-Show","Thriller","War","Western"};
     private final String[] mediaTypes = {"All media", "Movies", "Series"};
-
 
 
     @Override
