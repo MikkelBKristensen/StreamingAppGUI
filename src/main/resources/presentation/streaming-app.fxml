@@ -15,7 +15,7 @@
 <BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presentation.Controller">
    <top>
    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100" prefWidth="1000.0" style="-fx-background-color: dimgrey;" BorderPane.alignment="CENTER">
-         <ImageView fitHeight="72.0" fitWidth="84.0" layoutX="14.0" layoutY="14.0" onMouseClicked="#setDefault" pickOnBounds="true" preserveRatio="true">
+         <ImageView fitHeight="72.0" fitWidth="84.0" layoutX="51.0" layoutY="15.0" onMouseClicked="#setDefault" pickOnBounds="true" preserveRatio="true">
             <image>
                <Image url="@../Netflix-Symbol.png">
                </Image>
@@ -37,8 +37,11 @@
          <content>
          <FlowPane fx:id="mediaPane" alignment="CENTER_LEFT" columnHalignment="CENTER" hgap="10.0" prefWrapLength="1000.0" vgap="25.0">
                <padding>
-                  <Insets bottom="10.0" top="10.0" />
-               </padding></FlowPane>
+                  <Insets bottom="10.0" left="50.0" top="10.0" />
+               </padding>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets></FlowPane>
          </content>
          <BorderPane.margin>
             <Insets />
