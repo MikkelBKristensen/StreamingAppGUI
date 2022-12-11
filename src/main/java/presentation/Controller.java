@@ -61,7 +61,7 @@ public class Controller implements Initializable {
     private ComboBox<String> mediaComboBox;
 
 
-    // Helper methods
+    // *** Helper methods ***
 
     public void sortBy(MediaCollection mediaList, String sortBy) {
         switch(sortBy) {
@@ -104,7 +104,7 @@ public class Controller implements Initializable {
         activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
     }
 
-    // ActionEvents
+    // *** ActionEvents ***
 
     EventHandler<ActionEvent> sortByComboHandler = new EventHandler<ActionEvent>() {
         @Override
@@ -216,7 +216,7 @@ public class Controller implements Initializable {
     public void setDefault(MouseEvent event) {
         searchTextField.clear();
         sortByComboBox.setValue("Sort by");
-        genreComboBox.setValue("All genres");
+        genreComboBox.setValue("All Genres");
         mediaComboBox.setValue("All media");
     }
 
@@ -227,10 +227,10 @@ public class Controller implements Initializable {
     // Making lists for comboBoxes
     private final String[] sortByOptions = {"Sort by","Favorites", "Alphabetical (A-Z)","Alphabetical (Z-A)",
             "Rating (Highest first)", "Rating (Lowest first)", "Release year (Newest first)", "Release year (Oldest first)"};
-    private final String[] profileOptions = {"Save profile", "Change profile"};
+    private final String[] profileOptions = {"Change name", "Change profile"};
+
     //TODO change genres to a HashMap that is filled by looping over all media
     private final String[] genres = new String[]{"All Genres","Action","Adventure","Biography","Comedy","Crime","Drama",
-
             "Family","Fantasy","Film-Noir","History","Horror","Music","Musical","Mystery","Romance","Sci-Fi",
             "Sport","Talk-Show","Thriller","War","Western"};
     private final String[] mediaTypes = {"All media", "Movies", "Series"};
