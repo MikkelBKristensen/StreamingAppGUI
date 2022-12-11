@@ -17,10 +17,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -46,6 +45,8 @@ public class HelloController implements Initializable {
     }
 
     @FXML
+    private BorderPane borderPane;
+    @FXML
     private Button logoButton;
     @FXML
     private TextField searchTextField;
@@ -53,7 +54,6 @@ public class HelloController implements Initializable {
     private Button searchButton;
     @FXML
     private ComboBox<String> sortByComboBox;
-
     @FXML
     private ComboBox<String> profileComboBox;
     @FXML
@@ -61,51 +61,62 @@ public class HelloController implements Initializable {
     @FXML
     private ComboBox<String> mediaComboBox;
 
-    String searchedName;
-
     // ActionEvents
     EventHandler<ActionEvent> sortByComboHandler = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent actionEvent) {
 
             switch(sortByComboBox.getValue()) {
-                case "Default" -> {
+                case "Sort by" -> {
                     activeMediaList.getMedia().clear();
                     activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
                     redrawMediaPane(mediaPane);
                 }
                 case "Favorites" -> {
+                    activeMediaList.getMedia().clear();
                     activeMediaList = primaryMediaList.getCollectionByName(profileList.getActiveProfile().getFavorites());
                     redrawMediaPane(mediaPane);
                 }
                 case "Alphabetical (A-Z)" -> {
+                    activeMediaList.getMedia().clear();
+                    activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
                     activeMediaList.sortByAlphabetical();
                     redrawMediaPane(mediaPane);
                 }
                 case "Alphabetical (Z-A)" -> {
+                    activeMediaList.getMedia().clear();
+                    activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
                     activeMediaList.sortByAlphabeticalReverse();
                     redrawMediaPane(mediaPane);
                 }
                 case "Rating (Highest first)" -> {
+                    activeMediaList.getMedia().clear();
+                    activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
                     activeMediaList.sortByRating();
                     redrawMediaPane(mediaPane);
                 }
                 case "Rating (Lowest first)" -> {
+                    activeMediaList.getMedia().clear();
+                    activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
                     activeMediaList.sortByRatingReverse();
                     redrawMediaPane(mediaPane);
                 }
                 case "Release year (Newest first)" -> {
+                    activeMediaList.getMedia().clear();
+                    activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
                     activeMediaList.sortByReleaseYear();
                     redrawMediaPane(mediaPane);
                 }
                 case "Release year (Oldest first)" -> {
+                    activeMediaList.getMedia().clear();
+                    activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
                     activeMediaList.sortByReleaseYearReverse();
                     redrawMediaPane(mediaPane);
                 }
             }
         }
     };
-    EventHandler<ActionEvent> genreComboBoxHandler = new EventHandler<ActionEvent>() {
+    EventHandler<ActionEvent> genreComboBoxHandler = new EventHandler<>() {
         @Override
         public void handle(ActionEvent actionEvent) {
 
@@ -122,9 +133,19 @@ public class HelloController implements Initializable {
             }
         }
     };
+    EventHandler<ActionEvent> mediaComboBoxHandler = new EventHandler<>() {
+        @Override
+        public void handle(ActionEvent actionEvent) {
+            switch (mediaComboBox.getValue()) {
+                case "All media" -> {
+
+                }
+            }
+        }
+    };
 
     @FXML
-    public void search(ActionEvent event) {
+    public void search(MouseEvent event) {
         /*searchedName = searchTextField.getText();
         for (Media media : mediaCollection) {
             currentMediaCollection.add(media);
@@ -134,11 +155,19 @@ public class HelloController implements Initializable {
     }
 
     @FXML
+    public void setDefault(MouseEvent event) {
+        searchTextField.clear();
+        sortByComboBox.setValue("Sort by");
+        genreComboBox.setValue("All genres");
+        mediaComboBox.setValue("All media");
+    }
+
+    @FXML
     private FlowPane mediaPane;
 
 
     // Making lists for comboBoxes
-    private final String[] sortByOptions = {"Default","Favorites", "Alphabetical (A-Z)","Alphabetical (Z-A)",
+    private final String[] sortByOptions = {"Sort by","Favorites", "Alphabetical (A-Z)","Alphabetical (Z-A)",
             "Rating (Highest first)", "Rating (Lowest first)", "Release year (Newest first)", "Release year (Oldest first)"};
     private final String[] profileOptions = {"Save profile", "Change profile" };
     private final String[] genres = {"All genres", "Action", "Adventure", "Biography", "Crime", "Horror"};
@@ -247,12 +276,13 @@ public class HelloController implements Initializable {
         return addToFavorites;
     }
 
+    // Pop up window when clicking on mediaCard
     public void singleMediaPane(Media media) {
-
 
         VBox singleMediaPane = new VBox();
         HBox genreBox = new HBox();
         Button playButton = new Button("Play");
+        playButton.setStyle("-fx-background-color: green;");
 
         singleMediaPane.setSpacing(20);
 
@@ -266,16 +296,24 @@ public class HelloController implements Initializable {
         media.getGenres().forEach((genre) -> genreBox.getChildren().add(new Text(genre + " ")));
 
         singleMediaPane.getChildren().add(genreBox);
-
         singleMediaPane.getChildren().add(playButton);
 
+
+
         playButton.setOnMouseClicked((e) -> {
-            playButton.setText("Playing");
+            if (playButton.getText().equals("Play")) {
+                playButton.setText("Stop");
+                playButton.setStyle("-fx-background-color: red;");
+            } else if (playButton.getText().equals("Stop")) {
+                playButton.setText("Play");
+                playButton.setStyle("-fx-background-color: green;");
+            }
         });
 
-        Scene scene = new Scene(singleMediaPane, 600, 400);
+        Scene scene = new Scene(singleMediaPane);
         Stage stage = new Stage();
-        stage.setTitle("New Window");
+        stage.centerOnScreen();
+        //stage.setTitle(media.getTitle());
         stage.setScene(scene);
         stage.show();
 
