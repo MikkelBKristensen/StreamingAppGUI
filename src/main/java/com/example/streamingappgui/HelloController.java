@@ -99,7 +99,7 @@ public class HelloController implements Initializable {
             }
         }
     };
-    EventHandler<ActionEvent> genreComboBoxHandler = new EventHandler<ActionEvent>() {
+    EventHandler<ActionEvent> genreComboBoxHandler = new EventHandler<>() {
         @Override
         public void handle(ActionEvent actionEvent) {
 
@@ -175,10 +175,10 @@ public class HelloController implements Initializable {
 
         Group mediaCard = new Group();
         ImageView mediaPosterWrapper = new ImageView(new Image(media.getPosterURL()));
-        Text mediaTitle = new Text(media.getTitle());
+        // Text mediaTitle = new Text(media.getTitle());
 
         mediaCard.getChildren().add(mediaPosterWrapper);
-        mediaCard.getChildren().add(mediaTitle);
+        // mediaCard.getChildren().add(mediaTitle);
 
         return mediaCard;
     }
