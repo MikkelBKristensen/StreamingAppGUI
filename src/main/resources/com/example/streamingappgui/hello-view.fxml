@@ -11,8 +11,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.shape.Line?>
 
-
-<BorderPane fx:id="borderPane" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.streamingappgui.HelloController">
+<BorderPane fx:id="borderPane" prefHeight="621.0" prefWidth="1076.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.streamingappgui.HelloController">
    <top>
       <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: grey;" BorderPane.alignment="CENTER">
          <Button id="searchButton" fx:id="searchButton" layoutX="266.0" layoutY="37.0" mnemonicParsing="false" onMouseClicked="#search" prefHeight="25.0" prefWidth="52.0" text="Search" />
@@ -32,10 +31,76 @@
       </AnchorPane>
    </top>
    <center>
-      <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="537.0" prefWidth="955.0" style="-fx-background-color: grey;" BorderPane.alignment="CENTER">
+      <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="500.0" style="-fx-background-color: grey;" BorderPane.alignment="CENTER">
          <content>
-            <FlowPane fx:id="flowPane" hgap="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="536.0" prefWidth="955.0" style="-fx-background-color: grey;" vgap="5.0" />
+            <FlowPane fx:id="flowPane" alignment="TOP_CENTER" hgap="8.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="853.0" prefWidth="920.0" style="-fx-background-color: grey;" vgap="10.0">
+               <children>
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+                  <Button mnemonicParsing="false" prefHeight="209.0" prefWidth="140.0" text="Media" />
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" />
+               </padding></FlowPane>
          </content>
+         <padding>
+            <Insets left="10.0" />
+         </padding>
       </ScrollPane>
    </center>
 </BorderPane>

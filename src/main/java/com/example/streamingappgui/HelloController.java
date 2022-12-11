@@ -73,7 +73,6 @@ public class HelloController implements Initializable {
     private final String[] mediaTypes = {"All media", "Movies", "Series"};
 
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
