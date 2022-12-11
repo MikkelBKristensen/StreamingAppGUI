@@ -80,11 +80,11 @@ public class FileHandlerImpl implements FileHandler {
     public String getImageURL(String title, String mediaType) {
         if(mediaType.equals("film")) {
 
-            File imageFile = new File("/lib/media/" + mediaType + "plakater/" + title + ".jpg");
+            File imageFile = new File("lib/media/" + mediaType + "plakater/" + title + ".jpg");
 
             return imageFile.toURI().toString();
         } else if (mediaType.equals("serie")) {
-            File imageFile = new File("demo/lib/media/" + mediaType + "forsider/" + title + ".jpg");
+            File imageFile = new File("lib/media/" + mediaType + "forsider/" + title + ".jpg");
 
             return imageFile.toURI().toString();
         }
