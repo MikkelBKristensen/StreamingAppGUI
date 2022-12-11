@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -106,7 +107,7 @@ public class Controller implements Initializable {
 
     // *** ActionEvents ***
 
-    EventHandler<ActionEvent> sortByComboHandler = new EventHandler<ActionEvent>() {
+    EventHandler<ActionEvent> sortByComboHandler = new EventHandler<>() {
         @Override
         public void handle(ActionEvent actionEvent) {
 
@@ -245,6 +246,10 @@ public class Controller implements Initializable {
         mediaComboBox.getItems().addAll(mediaTypes);
         profileComboBox.getItems().addAll(profileOptions);
 
+        sortByComboBox.setValue("Sort by");
+        genreComboBox.setValue("All Genres");
+        mediaComboBox.setValue("All media");
+
         //Set Active profile
         profileList.setActiveProfile(1);
 
@@ -277,7 +282,7 @@ public class Controller implements Initializable {
 
         mediaCard.getChildren().add(mediaPosterWrapper);
         mediaCard.getChildren().add(addToFavorites(media));
-
+        mediaCard.setCursor(Cursor.HAND);
 
         mediaCard.setOnMouseClicked((e) -> {
             singleMediaPane(media);
