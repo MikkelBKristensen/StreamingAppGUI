@@ -21,7 +21,7 @@ public class Profile {
         this.dataHandler = DataHandler.getInstance();
     }
 
-    void addToFavorite(String mediaName) throws MediaAlreadyInArrayException, FileNotSavedException {
+    public void addToFavorite(String mediaName) throws MediaAlreadyInArrayException, FileNotSavedException {
         if (favorites.contains(mediaName)) {
             throw new MediaAlreadyInArrayException(mediaName);
         } else {
@@ -30,7 +30,7 @@ public class Profile {
         }
     }
 
-    void removeFromFavorite(String mediaName) throws MediaNotInArrayException, FileNotSavedException {
+    public void removeFromFavorite(String mediaName) throws MediaNotInArrayException, FileNotSavedException {
         if (favorites.contains(mediaName)) {
             favorites.remove(mediaName);
             dataHandler.saveProfile(this);
