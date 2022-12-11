@@ -13,6 +13,7 @@ public class HelloApplication extends Application {
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
+        primaryStage.setMaximized(true);
         primaryStage.setTitle("Netflix Go Home");
         primaryStage.setScene(scene);
         primaryStage.show();
