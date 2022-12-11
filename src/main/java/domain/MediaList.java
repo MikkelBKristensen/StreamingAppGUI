@@ -39,6 +39,7 @@ public class MediaList implements MediaCollection {
         }
         return new MediaList(genre, listOfMedia);
     }
+    //TODO did we not have a method like this one, but for single strings?
     public MediaCollection getCollectionByName(List<String> chosenMedia) {
         List<Media> listOfMedia = new ArrayList<>();
 

@@ -21,7 +21,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -109,7 +111,7 @@ public class Controller implements Initializable {
         public void handle(ActionEvent actionEvent) {
 
             switch(genreComboBox.getValue()) {
-                case "All genres" -> {
+                case "All Genres" -> {
                     activeMediaList.getMedia().clear();
                     activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
                     redrawMediaPane(mediaPane);
@@ -136,14 +138,19 @@ public class Controller implements Initializable {
         activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
     }
 
+    //TODO The commented out code doesn't work as intentional. It only clears the pane when used with empty searchfield. With any input, it does nothing(Seemingly).
     @FXML
-    public void search(MouseEvent event) {
-        /*searchedName = searchTextField.getText();
-        for (Media media : mediaCollection) {
-            currentMediaCollection.add(media);
+    public void search(MouseEvent event) throws MediaNotInArrayException {
+        /*String searchedName = searchTextField.getText();
+        //Set activeMediaList = new collection with all activeMediaList.getMedia().getTitle().contains(searcedName)
+        List<String> listOfMedia = new ArrayList<>();
+        for (Media media : activeMediaList.getMedia()) {
+            if (media.getTitle().contains(searchedName)) {
+                listOfMedia.add(media.getTitle());
+            }
         }
-        for (Media media : currentMediaCollection) {
-        }*/
+        activeMediaList = activeMediaList.getCollectionByName(listOfMedia);
+        redrawMediaPane(mediaPane);*/
     }
 
     @FXML
@@ -163,7 +170,7 @@ public class Controller implements Initializable {
             "Rating (Highest first)", "Rating (Lowest first)", "Release year (Newest first)", "Release year (Oldest first)"};
     private final String[] profileOptions = {"Save profile", "Change profile"};
     //TODO change genres to a HashMap that is filled by looping over all media
-    private final String[] genres = new String[]{"Action","Adventure","Biography","Comedy","Crime","Drama",
+    private final String[] genres = new String[]{"All Genres","Action","Adventure","Biography","Comedy","Crime","Drama",
             "Family","Fantasy","Film-Noir","History","Horror","Music","Musical","Mystery","Romance","Sci-Fi",
             "Sport","Talk-Show","Thriller","War","Western"};
     private final String[] mediaTypes = {"All media", "Movies", "Series"};
