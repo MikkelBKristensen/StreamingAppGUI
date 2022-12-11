@@ -20,6 +20,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -56,7 +57,52 @@ public class Controller implements Initializable {
     @FXML
     private ComboBox<String> mediaComboBox;
 
+
+    // Helper methods
+
+    public void sortBy(MediaCollection mediaList, String sortBy) {
+        switch(sortBy) {
+            case "Sort by" -> {
+                redrawMediaPane(mediaPane);
+            }
+            case "Favorites" -> {
+                activeMediaList = primaryMediaList.getCollectionByName(profileList.getActiveProfile().getFavorites());
+                redrawMediaPane(mediaPane);
+            }
+            case "Alphabetical (A-Z)" -> {
+                activeMediaList.sortByAlphabetical();
+                redrawMediaPane(mediaPane);
+            }
+            case "Alphabetical (Z-A)" -> {
+                activeMediaList.sortByAlphabeticalReverse();
+                redrawMediaPane(mediaPane);
+            }
+            case "Rating (Highest first)" -> {
+                activeMediaList.sortByRating();
+                redrawMediaPane(mediaPane);
+            }
+            case "Rating (Lowest first)" -> {
+                activeMediaList.sortByRatingReverse();
+                redrawMediaPane(mediaPane);
+            }
+            case "Release year (Newest first)" -> {
+                activeMediaList.sortByReleaseYearReverse();
+                redrawMediaPane(mediaPane);
+            }
+            case "Release year (Oldest first)" -> {
+                activeMediaList.sortByReleaseYear();
+                redrawMediaPane(mediaPane);
+            }
+        }
+    }
+
+    private void clearAndFillMediaList() {
+        activeMediaList.getMedia().clear();
+        activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
+    }
+
     // ActionEvents
+
     EventHandler<ActionEvent> sortByComboHandler = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent actionEvent) {
@@ -93,12 +139,12 @@ public class Controller implements Initializable {
                 }
                 case "Release year (Newest first)" -> {
                     clearAndFillMediaList();
-                    activeMediaList.sortByReleaseYear();
+                    activeMediaList.sortByReleaseYearReverse();
                     redrawMediaPane(mediaPane);
                 }
                 case "Release year (Oldest first)" -> {
                     clearAndFillMediaList();
-                    activeMediaList.sortByReleaseYearReverse();
+                    activeMediaList.sortByReleaseYear();
                     redrawMediaPane(mediaPane);
                 }
             }
@@ -109,13 +155,15 @@ public class Controller implements Initializable {
         public void handle(ActionEvent actionEvent) {
 
             switch(genreComboBox.getValue()) {
-                case "All genres" -> {
+                case "All Genres" -> {
                     activeMediaList.getMedia().clear();
                     activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
+                    sortBy(activeMediaList, sortByComboBox.getValue());
                     redrawMediaPane(mediaPane);
                 }
                 default -> {
                     activeMediaList = primaryMediaList.getCollectionByGenre(genreComboBox.getValue());
+                    sortBy(activeMediaList, sortByComboBox.getValue());
                     redrawMediaPane(mediaPane);
                 }
             }
@@ -126,15 +174,25 @@ public class Controller implements Initializable {
         public void handle(ActionEvent actionEvent) {
             switch (mediaComboBox.getValue()) {
                 case "All media" -> {
+                    activeMediaList.getMedia().clear();
+                    activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
+                    sortBy(activeMediaList, sortByComboBox.getValue());
+                    redrawMediaPane(mediaPane);
+                }
+                default -> {
+                    try {
+                        activeMediaList = primaryMediaList.getCollectionByType(mediaComboBox.getValue());
+                        sortBy(activeMediaList, sortByComboBox.getValue());
+                        redrawMediaPane(mediaPane);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }
     };
 
-    private void clearAndFillMediaList() {
-        activeMediaList.getMedia().clear();
-        activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
-    }
+
 
     @FXML
     public void search(MouseEvent event) {
@@ -163,7 +221,7 @@ public class Controller implements Initializable {
             "Rating (Highest first)", "Rating (Lowest first)", "Release year (Newest first)", "Release year (Oldest first)"};
     private final String[] profileOptions = {"Save profile", "Change profile"};
     //TODO change genres to a HashMap that is filled by looping over all media
-    private final String[] genres = new String[]{"Action","Adventure","Biography","Comedy","Crime","Drama",
+    private final String[] genres = new String[]{"All Genres", "Action","Adventure","Biography","Comedy","Crime","Drama",
             "Family","Fantasy","Film-Noir","History","Horror","Music","Musical","Mystery","Romance","Sci-Fi",
             "Sport","Talk-Show","Thriller","War","Western"};
     private final String[] mediaTypes = {"All media", "Movies", "Series"};
@@ -185,6 +243,7 @@ public class Controller implements Initializable {
         //Add event handlers.
         sortByComboBox.addEventFilter(ActionEvent.ACTION, sortByComboHandler);
         genreComboBox.addEventFilter(ActionEvent.ACTION, genreComboBoxHandler);
+        mediaComboBox.addEventFilter(ActionEvent.ACTION, mediaComboBoxHandler);
 
         //Draw the mediaPane to fill up with most recent mediaList;
         redrawMediaPane(mediaPane);
