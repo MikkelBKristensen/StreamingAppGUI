@@ -84,10 +84,10 @@ public class MediaList implements MediaCollection {
     public void sortByReleaseYearReverse() {
         media.sort(Comparator.comparing(Media::getReleaseYear).reversed());
     }
-    public void sortByAlphabetical() throws IOException{
+    public void sortByAlphabetical() {
         media.sort(Comparator.comparing(Media::getTitle));
     }
-    public void sortByAlphabeticalReverse() throws IOException{
+    public void sortByAlphabeticalReverse() {
         media.sort(Comparator.comparing(Media::getTitle).reversed());
     }
     public List<Media> getMedia() {

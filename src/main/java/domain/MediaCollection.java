@@ -22,9 +22,9 @@ public interface MediaCollection {
 
     void sortByReleaseYearReverse();
 
-    void sortByAlphabetical() throws IOException;
+    void sortByAlphabetical();
 
-    void sortByAlphabeticalReverse() throws IOException;
+    void sortByAlphabeticalReverse();
 
     List<Media> getMedia();
 
