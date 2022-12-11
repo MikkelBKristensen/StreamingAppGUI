@@ -21,6 +21,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.HashSet;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -62,8 +63,7 @@ public class Controller implements Initializable {
 
             switch(sortByComboBox.getValue()) {
                 case "Sort by" -> {
-                    activeMediaList.getMedia().clear();
-                    activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
+                    clearAndFillMediaList();
                     redrawMediaPane(mediaPane);
                 }
                 case "Favorites" -> {
@@ -72,38 +72,32 @@ public class Controller implements Initializable {
                     redrawMediaPane(mediaPane);
                 }
                 case "Alphabetical (A-Z)" -> {
-                    activeMediaList.getMedia().clear();
-                    activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
+                    // clearAndFillMediaList();
                     activeMediaList.sortByAlphabetical();
                     redrawMediaPane(mediaPane);
                 }
                 case "Alphabetical (Z-A)" -> {
-                    activeMediaList.getMedia().clear();
-                    activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
+                    clearAndFillMediaList();
                     activeMediaList.sortByAlphabeticalReverse();
                     redrawMediaPane(mediaPane);
                 }
                 case "Rating (Highest first)" -> {
-                    activeMediaList.getMedia().clear();
-                    activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
+                    clearAndFillMediaList();
                     activeMediaList.sortByRating();
                     redrawMediaPane(mediaPane);
                 }
                 case "Rating (Lowest first)" -> {
-                    activeMediaList.getMedia().clear();
-                    activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
+                    clearAndFillMediaList();
                     activeMediaList.sortByRatingReverse();
                     redrawMediaPane(mediaPane);
                 }
                 case "Release year (Newest first)" -> {
-                    activeMediaList.getMedia().clear();
-                    activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
+                    clearAndFillMediaList();
                     activeMediaList.sortByReleaseYear();
                     redrawMediaPane(mediaPane);
                 }
                 case "Release year (Oldest first)" -> {
-                    activeMediaList.getMedia().clear();
-                    activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
+                    clearAndFillMediaList();
                     activeMediaList.sortByReleaseYearReverse();
                     redrawMediaPane(mediaPane);
                 }
@@ -137,6 +131,11 @@ public class Controller implements Initializable {
         }
     };
 
+    private void clearAndFillMediaList() {
+        activeMediaList.getMedia().clear();
+        activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
+    }
+
     @FXML
     public void search(MouseEvent event) {
         /*searchedName = searchTextField.getText();
@@ -162,8 +161,11 @@ public class Controller implements Initializable {
     // Making lists for comboBoxes
     private final String[] sortByOptions = {"Sort by","Favorites", "Alphabetical (A-Z)","Alphabetical (Z-A)",
             "Rating (Highest first)", "Rating (Lowest first)", "Release year (Newest first)", "Release year (Oldest first)"};
-    private final String[] profileOptions = {"Save profile", "Change profile" };
-    private final String[] genres = {"All genres", "Action", "Adventure", "Biography", "Crime", "Horror"};
+    private final String[] profileOptions = {"Save profile", "Change profile"};
+    //TODO change genres to a HashMap that is filled by looping over all media
+    private final String[] genres = new String[]{"Action","Adventure","Biography","Comedy","Crime","Drama",
+            "Family","Fantasy","Film-Noir","History","Horror","Music","Musical","Mystery","Romance","Sci-Fi",
+            "Sport","Talk-Show","Thriller","War","Western"};
     private final String[] mediaTypes = {"All media", "Movies", "Series"};
 
 
