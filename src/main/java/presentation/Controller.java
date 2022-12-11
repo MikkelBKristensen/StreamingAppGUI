@@ -1,4 +1,4 @@
-package com.example.streamingappgui;
+package presentation;
 
 import domain.Media;
 import domain.*;
@@ -9,32 +9,26 @@ import exceptions.MediaNotInArrayException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class HelloController implements Initializable {
+public class Controller implements Initializable {
     private final MediaCollection primaryMediaList;
     private MediaCollection activeMediaList;
     private ProfileCollection profileList;
 
-    public HelloController() {
+    public Controller() {
         try {
             primaryMediaList = new MediaList();
             activeMediaList = new MediaList();
@@ -138,7 +132,6 @@ public class HelloController implements Initializable {
         public void handle(ActionEvent actionEvent) {
             switch (mediaComboBox.getValue()) {
                 case "All media" -> {
-
                 }
             }
         }
@@ -195,7 +188,7 @@ public class HelloController implements Initializable {
         redrawMediaPane(mediaPane);
     }
 
-    //Used to draw the mediapane on initialization, or whenever the mediaList has been altered in any way.
+    //Used to draw the mediaPane on initialization, or whenever the mediaList has been altered in any way.
     public void redrawMediaPane(FlowPane mediaPane) {
 
         mediaPane.getChildren().clear();
@@ -210,14 +203,12 @@ public class HelloController implements Initializable {
 
         VBox mediaCard = new VBox();
         ImageView mediaPosterWrapper = new ImageView(new Image(media.getPosterURL()));
-        Text mediaTitle = new Text(media.getTitle());
 
         mediaCard.setSpacing(10);
-        mediaTitle.setWrappingWidth(100);
 
         mediaCard.getChildren().add(mediaPosterWrapper);
-        mediaCard.getChildren().add(mediaTitle);
         mediaCard.getChildren().add(addToFavorites(media));
+
 
         mediaCard.setOnMouseClicked((e) -> {
             singleMediaPane(media);
@@ -285,20 +276,21 @@ public class HelloController implements Initializable {
         playButton.setStyle("-fx-background-color: green;");
 
         singleMediaPane.setSpacing(20);
+        singleMediaPane.setPrefSize(400, 400);
+
 
         singleMediaPane.getChildren().add(new Text(media.getTitle()));
         singleMediaPane.getChildren().add(new ImageView(new Image(media.getPosterURL())));
         singleMediaPane.getChildren().add(new Text("Rating: " + Double.toString(media.getRating())));
         singleMediaPane.getChildren().add(new Text("Release year: " + Integer.toString(media.getReleaseYear())));
-
+        if (media instanceof Series) {
+            singleMediaPane.getChildren().add(new Text("Seasons: " + ((Series) media).getEpisodesMap()));
+        }
         genreBox.getChildren().add(new Text("Genres: "));
-
-        media.getGenres().forEach((genre) -> genreBox.getChildren().add(new Text(genre + " ")));
+        media.getGenres().forEach((genre) -> genreBox.getChildren().add(new Text(genre + ", ")));
 
         singleMediaPane.getChildren().add(genreBox);
         singleMediaPane.getChildren().add(playButton);
-
-
 
         playButton.setOnMouseClicked((e) -> {
             if (playButton.getText().equals("Play")) {

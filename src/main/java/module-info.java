@@ -3,6 +3,6 @@ module com.example.streamingappgui {
     requires javafx.fxml;
 
 
-    opens com.example.streamingappgui to javafx.fxml;
-    exports com.example.streamingappgui;
+    opens presentation to javafx.fxml;
+    exports presentation;
 }
