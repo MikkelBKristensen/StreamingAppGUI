@@ -1,13 +1,17 @@
 package com.example.streamingappgui;
 
 import domain.Media;
+import domain.MediaCollection;
+import domain.MediaList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class HelloController implements Initializable {
@@ -28,26 +32,28 @@ public class HelloController implements Initializable {
 
 
     String searchedName;
+    List<Media> mediaList;
+    MediaCollection mediaCollection;
+    MediaCollection currentMediaCollection;
+
+
 
     // ActionEvents
+
     @FXML
-    public void update
+    public void updateMediaCards() {
+    }
     @FXML
     public void sortedBy(ActionEvent event) {
     }
     @FXML
-    public void search(ActionEvent event) {
-        /*searchedName = searchTextField.getText();
-        for (Media media : mediaCollection) {
-            currentMediaCollection.add(media);
-        }
-        for (Media media : currentMediaCollection) {
-        }*/
+    public void search(MouseEvent event) {
     }
 
 
 
     // Making lists for comboBoxes
+
     private final String[] sortByOptions = {"Default","Favorites", "Alphabetical (A-Z)","Alphabetical (Z-A)",
             "Rating (Highest first", "Rating (Lowest first", "Release year (Newest first)", "Release year (Oldest first)"};
     private final String[] profileOptions = {"Save profile", "Change profile" };
