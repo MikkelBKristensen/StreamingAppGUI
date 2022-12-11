@@ -38,7 +38,7 @@ Alfred Hitchcock Presents; 1955-1962; Crime, Drama, Mystery; 8,6; 1-39, 2-39, 3-
 I Love Lucy; 1951-1957; Comedy, Family; 8,3; 1-35, 2-31, 3-31, 4-30, 5-26, 6-27;
 24; 2001-2010; Action, Crime, Drama; 8,4; 1-24, 2-24, 3-24, 4-24, 5-24, 6-24,7-24, 8-24;
 The Americans; 2013-2018; Crime, Drama, Mystery; 8,4; 1-13, 2-13, 3-13, 4-13, 5-13, 6-10;
-Girls; 2012-2017; Comedy, Drama; 7,3; 1-10, 2-10, 3-12, 4-10, 5-10; 6-10;
+Girls; 2012-2017; Comedy, Drama; 7,3; 1-10, 2-10, 3-12, 4-10, 5-10, 6-10;
 Mad Men; 2007-2015; Drama; 8,6; 1-13, 2-13, 3-13, 4-13, 5-13, 6-13, 7-14;
 Northern Exposure; 1990-1995; Comedy, Drama, Fantasy; 8,3; 1-8, 2-7, 3-23, 4-25, 5-24, 6-23;
 Star Trek; 1966-1969; Action, Adventure, Sci-fi; 8,3; 1-29, 2-26, 3-24;
