@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 
-<BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.streamingappgui.HelloController">
+<BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="presentation.Controller">
    <top>
    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100" prefWidth="1000.0" style="-fx-background-color: dimgrey;" BorderPane.alignment="CENTER">
       <Button id="searchButton" fx:id="searchButton" layoutX="266.0" layoutY="37.0" mnemonicParsing="false" onAction="#search" onMouseClicked="#search" prefHeight="25.0" prefWidth="52.0" text="Search" />
