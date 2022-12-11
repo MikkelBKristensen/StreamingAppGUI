@@ -44,7 +44,7 @@ public class MediaList implements MediaCollection {
 
         for (Media media : media) {
             for (String title : chosenMedia) {
-                if (media.getTitle().toLowerCase().contains(title.toLowerCase())) {
+                if (media.getTitle().equals(title)) {
                     listOfMedia.add(media);
                 }
             }

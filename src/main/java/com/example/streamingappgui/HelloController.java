@@ -1,32 +1,37 @@
 package com.example.streamingappgui;
 
-
 import domain.Media;
-
 import domain.*;
 import exceptions.FileNotLoadedException;
+import exceptions.FileNotSavedException;
+import exceptions.MediaAlreadyInArrayException;
 import exceptions.MediaNotInArrayException;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class HelloController implements Initializable {
-    private MediaCollection primaryMediaList;
+    private final MediaCollection primaryMediaList;
     private MediaCollection activeMediaList;
     private ProfileCollection profileList;
 
@@ -48,6 +53,7 @@ public class HelloController implements Initializable {
     private Button searchButton;
     @FXML
     private ComboBox<String> sortByComboBox;
+
     @FXML
     private ComboBox<String> profileComboBox;
     @FXML
@@ -171,15 +177,108 @@ public class HelloController implements Initializable {
     }
 
     //Used to generate the cards containing media.
-    public Group mediaCard(Media media) {
+    public VBox mediaCard(Media media) {
 
-        Group mediaCard = new Group();
+        VBox mediaCard = new VBox();
         ImageView mediaPosterWrapper = new ImageView(new Image(media.getPosterURL()));
         Text mediaTitle = new Text(media.getTitle());
 
+        mediaCard.setSpacing(10);
+        mediaTitle.setWrappingWidth(100);
+
         mediaCard.getChildren().add(mediaPosterWrapper);
         mediaCard.getChildren().add(mediaTitle);
+        mediaCard.getChildren().add(addToFavorites(media));
+
+        mediaCard.setOnMouseClicked((e) -> {
+            singleMediaPane(media);
+        });
 
         return mediaCard;
     }
+
+    public Button addToFavorites(Media media) {
+        Button addToFavorites;
+
+        if(profileList.getActiveProfile().getFavorites().contains(media.getTitle())) {
+            addToFavorites = new Button("Remove from favorites");
+            addToFavorites.setOnMouseClicked((e) -> {
+                try {
+                    profileList.getActiveProfile().removeFromFavorite(media.getTitle());
+                    addToFavorites.setText("Added to favorites");
+                    activeMediaList.getMedia().clear();
+                    activeMediaList = primaryMediaList.getCollectionByName(profileList.getActiveProfile().getFavorites());
+                    redrawMediaPane(mediaPane);
+                } catch (MediaNotInArrayException error) {
+                    Alert alreadyInFavorites = new Alert(Alert.AlertType.ERROR);
+                    alreadyInFavorites.setTitle("Error");
+                    alreadyInFavorites.setHeaderText("Could not remove from favorites");
+                    alreadyInFavorites.setContentText(error.getMessage());
+                    alreadyInFavorites.showAndWait();
+                } catch (FileNotSavedException error) {
+                    Alert alreadyInFavorites = new Alert(Alert.AlertType.ERROR);
+                    alreadyInFavorites.setTitle("Error");
+                    alreadyInFavorites.setHeaderText("Could not save favorites to disc");
+                    alreadyInFavorites.setContentText(error.getMessage());
+                    alreadyInFavorites.showAndWait();
+                }
+            });
+        } else {
+            addToFavorites = new Button("Add to favorite");
+            addToFavorites.setOnMouseClicked((e) -> {
+                try {
+                    profileList.getActiveProfile().addToFavorite(media.getTitle());
+                    addToFavorites.setText("Added to favorites");
+                } catch (MediaAlreadyInArrayException error) {
+                    Alert alreadyInFavorites = new Alert(Alert.AlertType.ERROR);
+                    alreadyInFavorites.setTitle("Error");
+                    alreadyInFavorites.setHeaderText("Could not add to favorites");
+                    alreadyInFavorites.setContentText(error.getMessage());
+                    alreadyInFavorites.showAndWait();
+                } catch (FileNotSavedException error) {
+                    Alert alreadyInFavorites = new Alert(Alert.AlertType.ERROR);
+                    alreadyInFavorites.setTitle("Error");
+                    alreadyInFavorites.setHeaderText("Could not save favorites to disc");
+                    alreadyInFavorites.setContentText(error.getMessage());
+                    alreadyInFavorites.showAndWait();
+                }
+            });
+        }
+        return addToFavorites;
+    }
+
+    public void singleMediaPane(Media media) {
+
+
+        VBox singleMediaPane = new VBox();
+        HBox genreBox = new HBox();
+        Button playButton = new Button("Play");
+
+        singleMediaPane.setSpacing(20);
+
+        singleMediaPane.getChildren().add(new Text(media.getTitle()));
+        singleMediaPane.getChildren().add(new ImageView(new Image(media.getPosterURL())));
+        singleMediaPane.getChildren().add(new Text("Rating: " + Double.toString(media.getRating())));
+        singleMediaPane.getChildren().add(new Text("Release year: " + Integer.toString(media.getReleaseYear())));
+
+        genreBox.getChildren().add(new Text("Genres: "));
+
+        media.getGenres().forEach((genre) -> genreBox.getChildren().add(new Text(genre + " ")));
+
+        singleMediaPane.getChildren().add(genreBox);
+
+        singleMediaPane.getChildren().add(playButton);
+
+        playButton.setOnMouseClicked((e) -> {
+            playButton.setText("Playing");
+        });
+
+        Scene scene = new Scene(singleMediaPane, 600, 400);
+        Stage stage = new Stage();
+        stage.setTitle("New Window");
+        stage.setScene(scene);
+        stage.show();
+
+    }
+
 }
