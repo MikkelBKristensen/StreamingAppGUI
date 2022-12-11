@@ -307,7 +307,6 @@ public class Controller implements Initializable {
         Scene scene = new Scene(singleMediaPane);
         Stage stage = new Stage();
         stage.centerOnScreen();
-        //stage.setTitle(media.getTitle());
         stage.setScene(scene);
         stage.show();
 
