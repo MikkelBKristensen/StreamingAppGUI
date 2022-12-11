@@ -9,12 +9,24 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class HelloController implements Initializable {
+
+    @FXML
+    private BorderPane borderPane;
+    @FXML
+    private AnchorPane anchorPane;
+    @FXML
+    private ScrollPane scrollPane;
+    @FXML
+    private FlowPane flowPane;
     @FXML
     private Button logoButton;
     @FXML
