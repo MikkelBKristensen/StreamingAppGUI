@@ -28,7 +28,7 @@
    <center>
       <ScrollPane hbarPolicy="NEVER" maxHeight="1000.0" maxWidth="1000.0" prefViewportHeight="600.0" prefViewportWidth="1000.0" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
          <content>
-         <FlowPane fx:id="mediaPane" alignment="CENTER_LEFT" hgap="10.0" prefWrapLength="1000.0" vgap="8.0">
+         <FlowPane fx:id="mediaPane" alignment="CENTER_LEFT" columnHalignment="CENTER" hgap="10.0" prefWrapLength="1000.0" vgap="25.0">
                <padding>
                   <Insets bottom="10.0" top="10.0" />
                </padding></FlowPane>
