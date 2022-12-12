@@ -390,6 +390,7 @@ public class Controller implements Initializable {
         stage.setScene(scene);
         stage.show();
 
+        // Hello baby gurl
     }
 
 }
