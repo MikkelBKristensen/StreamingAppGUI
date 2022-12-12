@@ -48,29 +48,7 @@ class MediaCollectionTest {
         }
     }
 
-    @Test
-    void mediaCollectionUsedAsSearch() {
-
-        MediaCollection primaryCollection = testCollection.getCollectionByName("The");
-
-        primaryCollection.getMedia().forEach(System.out::println);
-    }
-
-    @Test
-    void getCollectionByNameWorksAsSearchMethod() {
-        List<String> searchTerms = new ArrayList<>(Arrays.asList("man", "Green", "Dandy", "Rock"));
-        List<String> expectedReturn = new ArrayList<>(Arrays.asList("Batman", "The Green Mile", "Yankee Doodle Dandy", "Rocky"));
-        MediaCollection returnedCollection = testCollection.getCollectionByName(searchTerms);
-        List<String> returnedMedia = new ArrayList<>();
-
-        returnedCollection.getMedia().forEach((media) -> returnedMedia.add(media.getTitle()));
-
-        returnedMedia.forEach(System.out::println);
-
-        for(String mediaName : expectedReturn) {
-            assert(returnedMedia.contains(mediaName));
-        }
-    }
+    //TODO write search function test
 
     @Test
     void sortByRating() {
@@ -126,19 +104,19 @@ class MediaCollectionTest {
 
     @Test
     void sortByAlphabetical() {
-        List<String> mediaToFetch = new ArrayList<>(Arrays.asList("The Green Mile", "Crisis in six scenes", "Batman", "Terms of endearment"));
+        List<String> mediaToFetch = new ArrayList<>(Arrays.asList("The Green Mile", "Crisis In Six Scenes", "Batman", "Terms of Endearment"));
         MediaCollection collectionToSort = testCollection.getCollectionByName(mediaToFetch);
         collectionToSort.sortByAlphabetical();
-        assertEquals (collectionToSort.getMedia().get(0).getTitle(), "Batman");
-        assertEquals (collectionToSort.getMedia().get(1).getTitle(), "Crisis In Six Scenes");
-        assertEquals (collectionToSort.getMedia().get(2).getTitle(), "Terms of Endearment");
-        assertEquals (collectionToSort.getMedia().get(3).getTitle(), "The Green Mile");
+        assertEquals ("Batman", collectionToSort.getMedia().get(0).getTitle());
+        assertEquals ("Crisis In Six Scenes", collectionToSort.getMedia().get(1).getTitle());
+        assertEquals ("Terms of Endearment", collectionToSort.getMedia().get(2).getTitle());
+        assertEquals ("The Green Mile", collectionToSort.getMedia().get(3).getTitle());
 
     }
 
     @Test
     void sortByReverseAlphabetical() {
-        List<String> mediaToFetch = new ArrayList<>(Arrays.asList("The Green Mile", "Crisis in six scenes", "Batman", "Terms of endearment"));
+        List<String> mediaToFetch = new ArrayList<>(Arrays.asList("The Green Mile", "Crisis In Six Scenes", "Batman", "Terms of Endearment"));
         MediaCollection collectionToSort = testCollection.getCollectionByName(mediaToFetch);
         collectionToSort.sortByAlphabeticalReverse();
         assertEquals (collectionToSort.getMedia().get(3).getTitle(), "Batman");

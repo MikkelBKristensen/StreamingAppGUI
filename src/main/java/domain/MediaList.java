@@ -46,7 +46,7 @@ public class MediaList implements MediaCollection {
 
         for (Media media : media) {
             for (String title : chosenMedia) {
-                if (media.getTitle().equals(title)) {
+                if (media.getTitle().equalsIgnoreCase(title)) {
                     listOfMedia.add(media);
                 }
             }
@@ -79,7 +79,7 @@ public class MediaList implements MediaCollection {
         }
         throw new MediaNotInArrayException(chosenMedia);
     }
-    public MediaCollection getCollectionByType(String mediaType) throws IOException {
+    public MediaCollection getCollectionByType(String mediaType) throws FileNotLoadedException {
         List<Media> listOfMedia;
         switch (mediaType) {
             case "Movies" -> listOfMedia = DataHandler.getInstance().assembleMovieList();

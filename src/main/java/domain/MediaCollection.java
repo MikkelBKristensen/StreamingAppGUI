@@ -1,5 +1,6 @@
 package domain;
 
+import exceptions.FileNotLoadedException;
 import exceptions.MediaNotInArrayException;
 
 import java.io.IOException;
@@ -10,7 +11,7 @@ public interface MediaCollection {
 
     MediaCollection getCollectionByName(List<String> chosenMedia);
 
-    MediaCollection getCollectionByType(String mediaType) throws IOException;
+    MediaCollection getCollectionByType(String mediaType) throws FileNotLoadedException;
     Media getMediaByName(String chosenMedia) throws MediaNotInArrayException;
     public MediaCollection getCollectionByName(String chosenMedia) throws MediaNotInArrayException;
     void sortByRating();
