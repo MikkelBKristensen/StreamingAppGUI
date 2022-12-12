@@ -1,6 +1,7 @@
 package domain;
 
 import exceptions.FileNotLoadedException;
+import exceptions.MediaAlreadyInArrayException;
 import exceptions.MediaNotInArrayException;
 
 import java.io.IOException;
@@ -52,6 +53,23 @@ public class MediaList implements MediaCollection {
         }
         return new MediaList(listOfMedia);
     }
+    public MediaCollection getCollectionByName(String chosenMedia) throws MediaNotInArrayException {
+
+        List<Media> listOfMedia = new ArrayList<>();
+
+        for (Media media : media) {
+            if(media.getTitle().toLowerCase().contains(chosenMedia.toLowerCase())) {
+                listOfMedia.add(media);
+            }
+        }
+
+        if(listOfMedia.size() == 0) {
+            throw new MediaNotInArrayException(chosenMedia);
+        }
+
+        return new MediaList(listOfMedia);
+    }
+
     public Media getMediaByName(String chosenMedia) throws MediaNotInArrayException {
 
         for(Media media : media) {
@@ -68,7 +86,6 @@ public class MediaList implements MediaCollection {
             case "Series" -> listOfMedia = DataHandler.getInstance().assembleSeriesList();
             default -> {
                 listOfMedia = DataHandler.getInstance().assembleMediaList();
-                throw new IllegalArgumentException();
             }
         }
         return new MediaList(listOfMedia);

@@ -17,6 +17,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -27,8 +28,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.security.Key;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -45,7 +45,6 @@ public class Controller implements Initializable {
             throw new RuntimeException(e);
         }
     }
-
     @FXML
     private BorderPane borderPane;
     @FXML
@@ -62,9 +61,6 @@ public class Controller implements Initializable {
     private ComboBox<String> genreComboBox;
     @FXML
     private ComboBox<String> mediaComboBox;
-
-
-    // *** Helper methods ***
 
     public void sortBy(MediaCollection mediaList, String sortBy) {
         switch(sortBy) {
@@ -102,13 +98,13 @@ public class Controller implements Initializable {
         }
     }
 
+    // *** Helper methods ***
     private void clearAndFillMediaList() {
         activeMediaList.getMedia().clear();
         activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
     }
 
     // *** ActionEvents ***
-
     EventHandler<ActionEvent> sortByComboHandler = new EventHandler<>() {
         @Override
         public void handle(ActionEvent actionEvent) {
@@ -124,32 +120,26 @@ public class Controller implements Initializable {
                     redrawMediaPane(mediaPane);
                 }
                 case "Alphabetical (A-Z)" -> {
-                    // clearAndFillMediaList();
                     activeMediaList.sortByAlphabetical();
                     redrawMediaPane(mediaPane);
                 }
                 case "Alphabetical (Z-A)" -> {
-                    clearAndFillMediaList();
                     activeMediaList.sortByAlphabeticalReverse();
                     redrawMediaPane(mediaPane);
                 }
                 case "Rating (Highest first)" -> {
-                    clearAndFillMediaList();
                     activeMediaList.sortByRating();
                     redrawMediaPane(mediaPane);
                 }
                 case "Rating (Lowest first)" -> {
-                    clearAndFillMediaList();
                     activeMediaList.sortByRatingReverse();
                     redrawMediaPane(mediaPane);
                 }
                 case "Release year (Newest first)" -> {
-                    clearAndFillMediaList();
                     activeMediaList.sortByReleaseYearReverse();
                     redrawMediaPane(mediaPane);
                 }
                 case "Release year (Oldest first)" -> {
-                    clearAndFillMediaList();
                     activeMediaList.sortByReleaseYear();
                     redrawMediaPane(mediaPane);
                 }
@@ -162,13 +152,23 @@ public class Controller implements Initializable {
 
             switch(genreComboBox.getValue()) {
                 case "All Genres" -> {
-                    activeMediaList.getMedia().clear();
-                    activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
+                    try {
+                        activeMediaList = primaryMediaList.getCollectionByType(mediaComboBox.getValue());
+                    } catch (IOException e) {
+                        //TODO man
+                        System.out.println("Fuck");
+                    }
                     sortBy(activeMediaList, sortByComboBox.getValue());
                     redrawMediaPane(mediaPane);
                 }
                 default -> {
-                    activeMediaList = primaryMediaList.getCollectionByGenre(genreComboBox.getValue());
+                    try {
+                        activeMediaList = primaryMediaList.getCollectionByType(mediaComboBox.getValue());
+                    } catch (IOException e) {
+                        //TODO man
+                        System.out.println("Fuck");
+                    }
+                    activeMediaList = activeMediaList.getCollectionByGenre(genreComboBox.getValue());
                     sortBy(activeMediaList, sortByComboBox.getValue());
                     redrawMediaPane(mediaPane);
                 }
@@ -178,47 +178,35 @@ public class Controller implements Initializable {
     EventHandler<ActionEvent> mediaComboBoxHandler = new EventHandler<>() {
         @Override
         public void handle(ActionEvent actionEvent) {
-            switch (mediaComboBox.getValue()) {
-                case "All media" -> {
-                    activeMediaList.getMedia().clear();
-                    activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
-                    sortBy(activeMediaList, sortByComboBox.getValue());
-                    redrawMediaPane(mediaPane);
-                }
-                default -> {
-                    try {
-                        activeMediaList = primaryMediaList.getCollectionByType(mediaComboBox.getValue());
-                        sortBy(activeMediaList, sortByComboBox.getValue());
-                        redrawMediaPane(mediaPane);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+            try {
+                activeMediaList = primaryMediaList.getCollectionByType(mediaComboBox.getValue());
+            } catch (IOException e) {
+                //TODO man
+                System.out.println("Fuck");
+            }
+
+            if(!genreComboBox.getValue().equals("All Genres")) {
+                activeMediaList = activeMediaList.getCollectionByGenre(genreComboBox.getValue());
+            }
+            sortBy(activeMediaList, sortByComboBox.getValue());
+            redrawMediaPane(mediaPane);
+        }
+    };
+    EventHandler<KeyEvent> searchBoxHandler = new EventHandler<>() {
+        @Override
+        public void handle(KeyEvent event) {
+            try {
+                activeMediaList = primaryMediaList.getCollectionByName(searchField.getText());
+                redrawMediaPane(mediaPane);
+            } catch (MediaNotInArrayException e) {
+                Text error = new Text(searchField.getText() + " is not in the catalogue :)");
+                mediaPane.getChildren().clear();
+                mediaPane.getChildren().add(error);
             }
         }
     };
 
-
-
     //TODO The commented out code doesn't work as intentional. It only clears the pane when used with empty searchField. With any input, it does nothing(Seemingly).
-    @FXML
-    public void search(MouseEvent event) throws MediaNotInArrayException {
-        String searchedName = searchTextField.getText();
-        //Set activeMediaList = new collection with all activeMediaList.getMedia().getTitle().contains(searcedName)
-        /*String searchedName = searchTextField.getText();
-        //Set activeMediaList = new collection with all activeMediaList.getMedia().getTitle().contains(searchedName)
-        List<String> listOfMedia = new ArrayList<>();
-        for (Media media : primaryMediaList.getMedia()) {
-            if (media.getTitle().contains(searchedName)) {
-                listOfMedia.add(media.getTitle());
-            }
-        }
-        activeMediaList = activeMediaList.getCollectionByName(listOfMedia);
-        redrawMediaPane(mediaPane);
-        activeMediaList = primaryMediaList.getCollectionByName(listOfMedia);
-        redrawMediaPane(mediaPane);*/
-    }
-
     @FXML
     public void setDefault(MouseEvent event) {
         if (!(searchTextField == null)) {
@@ -232,6 +220,8 @@ public class Controller implements Initializable {
     @FXML
     private FlowPane mediaPane;
 
+    @FXML
+    private TextField searchField;
 
     // Making lists for comboBoxes
     private final String[] sortByOptions = {"Sort by","Favorites", "Alphabetical (A-Z)","Alphabetical (Z-A)",
@@ -265,6 +255,7 @@ public class Controller implements Initializable {
         sortByComboBox.addEventFilter(ActionEvent.ACTION, sortByComboHandler);
         genreComboBox.addEventFilter(ActionEvent.ACTION, genreComboBoxHandler);
         mediaComboBox.addEventFilter(ActionEvent.ACTION, mediaComboBoxHandler);
+        searchField.addEventFilter(KeyEvent.ANY, searchBoxHandler);
 
         //Draw the mediaPane to fill up with most recent mediaList;
         redrawMediaPane(mediaPane);
@@ -307,9 +298,11 @@ public class Controller implements Initializable {
             addToFavorites.setOnMouseClicked((e) -> {
                 try {
                     profileList.getActiveProfile().removeFromFavorite(media.getTitle());
-                    addToFavorites.setText("Added to favorites");
-                    activeMediaList.getMedia().clear();
-                    activeMediaList = primaryMediaList.getCollectionByName(profileList.getActiveProfile().getFavorites());
+                    addToFavorites.setText("Add to favorites");
+                    if(sortByComboBox.getValue().equals("Favorites")) {
+                        //activeMediaList.getMedia().clear();
+                        activeMediaList = primaryMediaList.getCollectionByName(profileList.getActiveProfile().getFavorites());
+                    }
                     redrawMediaPane(mediaPane);
                 } catch (MediaNotInArrayException error) {
                     Alert alreadyInFavorites = new Alert(Alert.AlertType.ERROR);
@@ -326,7 +319,7 @@ public class Controller implements Initializable {
                 }
             });
         } else {
-            addToFavorites = new Button("Add to favorite");
+            addToFavorites = new Button("Add to favorites");
             addToFavorites.setOnMouseClicked((e) -> {
                 try {
                     profileList.getActiveProfile().addToFavorite(media.getTitle());

@@ -49,6 +49,14 @@ class MediaCollectionTest {
     }
 
     @Test
+    void mediaCollectionUsedAsSearch() {
+
+        MediaCollection primaryCollection = testCollection.getCollectionByName("The");
+
+        primaryCollection.getMedia().forEach(System.out::println);
+    }
+
+    @Test
     void getCollectionByNameWorksAsSearchMethod() {
         List<String> searchTerms = new ArrayList<>(Arrays.asList("man", "Green", "Dandy", "Rock"));
         List<String> expectedReturn = new ArrayList<>(Arrays.asList("Batman", "The Green Mile", "Yankee Doodle Dandy", "Rocky"));
