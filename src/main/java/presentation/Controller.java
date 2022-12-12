@@ -303,9 +303,11 @@ public class Controller implements Initializable {
             addToFavorites.setOnMouseClicked((e) -> {
                 try {
                     profileList.getActiveProfile().removeFromFavorite(media.getTitle());
-                    addToFavorites.setText("Added to favorites");
-                    activeMediaList.getMedia().clear();
-                    activeMediaList = primaryMediaList.getCollectionByName(profileList.getActiveProfile().getFavorites());
+                    addToFavorites.setText("Add to favorites");
+                    if(sortByComboBox.getValue().equals("Favorites")) {
+                        //activeMediaList.getMedia().clear();
+                        activeMediaList = primaryMediaList.getCollectionByName(profileList.getActiveProfile().getFavorites());
+                    }
                     redrawMediaPane(mediaPane);
                 } catch (MediaNotInArrayException error) {
                     Alert alreadyInFavorites = new Alert(Alert.AlertType.ERROR);
