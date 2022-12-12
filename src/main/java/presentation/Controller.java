@@ -6,7 +6,6 @@ import exceptions.FileNotSavedException;
 import exceptions.MediaAlreadyInArrayException;
 import exceptions.MediaNotInArrayException;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,6 +17,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -28,8 +28,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.security.Key;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -46,7 +45,6 @@ public class Controller implements Initializable {
             throw new RuntimeException(e);
         }
     }
-
     @FXML
     private BorderPane borderPane;
     @FXML
@@ -101,7 +99,6 @@ public class Controller implements Initializable {
     }
 
     // *** Helper methods ***
-
     private void clearAndFillMediaList() {
         activeMediaList.getMedia().clear();
         activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
@@ -195,9 +192,9 @@ public class Controller implements Initializable {
             redrawMediaPane(mediaPane);
         }
     };
-    EventHandler<ActionEvent> enactSearch = new EventHandler<>() {
+    EventHandler<KeyEvent> searchBoxHandler = new EventHandler<>() {
         @Override
-        public void handle(ActionEvent event) {
+        public void handle(KeyEvent event) {
             try {
                 activeMediaList = primaryMediaList.getCollectionByName(searchField.getText());
                 redrawMediaPane(mediaPane);
@@ -210,7 +207,6 @@ public class Controller implements Initializable {
     };
 
     //TODO The commented out code doesn't work as intentional. It only clears the pane when used with empty searchField. With any input, it does nothing(Seemingly).
-
     @FXML
     public void setDefault(MouseEvent event) {
         if (!(searchTextField == null)) {
@@ -259,7 +255,7 @@ public class Controller implements Initializable {
         sortByComboBox.addEventFilter(ActionEvent.ACTION, sortByComboHandler);
         genreComboBox.addEventFilter(ActionEvent.ACTION, genreComboBoxHandler);
         mediaComboBox.addEventFilter(ActionEvent.ACTION, mediaComboBoxHandler);
-        searchField.addEventFilter(ActionEvent.ACTION, enactSearch);
+        searchField.addEventFilter(KeyEvent.ANY, searchBoxHandler);
 
         //Draw the mediaPane to fill up with most recent mediaList;
         redrawMediaPane(mediaPane);
