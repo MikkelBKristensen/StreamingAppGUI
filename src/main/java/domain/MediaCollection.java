@@ -11,9 +11,8 @@ public interface MediaCollection {
     MediaCollection getCollectionByName(List<String> chosenMedia);
 
     MediaCollection getCollectionByType(String mediaType) throws IOException;
-
     Media getMediaByName(String chosenMedia) throws MediaNotInArrayException;
-
+    public MediaCollection getCollectionByName(String chosenMedia) throws MediaNotInArrayException;
     void sortByRating();
 
     void sortByRatingReverse();

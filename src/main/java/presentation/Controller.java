@@ -6,6 +6,7 @@ import exceptions.FileNotSavedException;
 import exceptions.MediaAlreadyInArrayException;
 import exceptions.MediaNotInArrayException;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -63,9 +64,6 @@ public class Controller implements Initializable {
     @FXML
     private ComboBox<String> mediaComboBox;
 
-
-    // *** Helper methods ***
-
     public void sortBy(MediaCollection mediaList, String sortBy) {
         switch(sortBy) {
             case "Sort by" -> {
@@ -102,13 +100,14 @@ public class Controller implements Initializable {
         }
     }
 
+    // *** Helper methods ***
+
     private void clearAndFillMediaList() {
         activeMediaList.getMedia().clear();
         activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
     }
 
     // *** ActionEvents ***
-
     EventHandler<ActionEvent> sortByComboHandler = new EventHandler<>() {
         @Override
         public void handle(ActionEvent actionEvent) {
@@ -124,32 +123,26 @@ public class Controller implements Initializable {
                     redrawMediaPane(mediaPane);
                 }
                 case "Alphabetical (A-Z)" -> {
-                    // clearAndFillMediaList();
                     activeMediaList.sortByAlphabetical();
                     redrawMediaPane(mediaPane);
                 }
                 case "Alphabetical (Z-A)" -> {
-                    clearAndFillMediaList();
                     activeMediaList.sortByAlphabeticalReverse();
                     redrawMediaPane(mediaPane);
                 }
                 case "Rating (Highest first)" -> {
-                    clearAndFillMediaList();
                     activeMediaList.sortByRating();
                     redrawMediaPane(mediaPane);
                 }
                 case "Rating (Lowest first)" -> {
-                    clearAndFillMediaList();
                     activeMediaList.sortByRatingReverse();
                     redrawMediaPane(mediaPane);
                 }
                 case "Release year (Newest first)" -> {
-                    clearAndFillMediaList();
                     activeMediaList.sortByReleaseYearReverse();
                     redrawMediaPane(mediaPane);
                 }
                 case "Release year (Oldest first)" -> {
-                    clearAndFillMediaList();
                     activeMediaList.sortByReleaseYear();
                     redrawMediaPane(mediaPane);
                 }
@@ -162,8 +155,7 @@ public class Controller implements Initializable {
 
             switch(genreComboBox.getValue()) {
                 case "All Genres" -> {
-                    activeMediaList.getMedia().clear();
-                    activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
+                    clearAndFillMediaList();
                     sortBy(activeMediaList, sortByComboBox.getValue());
                     redrawMediaPane(mediaPane);
                 }
@@ -180,8 +172,7 @@ public class Controller implements Initializable {
         public void handle(ActionEvent actionEvent) {
             switch (mediaComboBox.getValue()) {
                 case "All media" -> {
-                    activeMediaList.getMedia().clear();
-                    activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
+                    clearAndFillMediaList();
                     sortBy(activeMediaList, sortByComboBox.getValue());
                     redrawMediaPane(mediaPane);
                 }
@@ -197,23 +188,21 @@ public class Controller implements Initializable {
             }
         }
     };
-
-
-
-    //TODO The commented out code doesn't work as intentional. It only clears the pane when used with empty searchField. With any input, it does nothing(Seemingly).
-    @FXML
-    public void search(MouseEvent event) throws MediaNotInArrayException {
-        String searchedName = searchTextField.getText();
-        //Set activeMediaList = new collection with all activeMediaList.getMedia().getTitle().contains(searcedName)
-        List<String> listOfMedia = new ArrayList<>();
-        for (Media media : activeMediaList.getMedia()) {
-            if (media.getTitle().contains(searchedName)) {
-                listOfMedia.add(media.getTitle());
+    EventHandler<ActionEvent> enactSearch = new EventHandler<>() {
+        @Override
+        public void handle(ActionEvent event) {
+            try {
+                activeMediaList = primaryMediaList.getCollectionByName(searchField.getText());
+                redrawMediaPane(mediaPane);
+            } catch (MediaNotInArrayException e) {
+                Text error = new Text(searchField.getText() + " is not in the catalogue :)");
+                mediaPane.getChildren().clear();
+                mediaPane.getChildren().add(error);
             }
         }
-        activeMediaList = activeMediaList.getCollectionByName(listOfMedia);
-        redrawMediaPane(mediaPane);
-    }
+    };
+
+    //TODO The commented out code doesn't work as intentional. It only clears the pane when used with empty searchField. With any input, it does nothing(Seemingly).
 
     @FXML
     public void setDefault(MouseEvent event) {
@@ -228,6 +217,8 @@ public class Controller implements Initializable {
     @FXML
     private FlowPane mediaPane;
 
+    @FXML
+    private TextField searchField;
 
     // Making lists for comboBoxes
     private final String[] sortByOptions = {"Sort by","Favorites", "Alphabetical (A-Z)","Alphabetical (Z-A)",
@@ -261,6 +252,7 @@ public class Controller implements Initializable {
         sortByComboBox.addEventFilter(ActionEvent.ACTION, sortByComboHandler);
         genreComboBox.addEventFilter(ActionEvent.ACTION, genreComboBoxHandler);
         mediaComboBox.addEventFilter(ActionEvent.ACTION, mediaComboBoxHandler);
+        searchField.addEventFilter(ActionEvent.ACTION, enactSearch);
 
         //Draw the mediaPane to fill up with most recent mediaList;
         redrawMediaPane(mediaPane);

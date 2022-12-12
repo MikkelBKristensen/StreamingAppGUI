@@ -22,8 +22,8 @@
                <Cursor fx:constant="HAND" />
             </cursor>
          </ImageView>
-      <Button id="searchButton" fx:id="searchButton" layoutX="266.0" layoutY="38.0" mnemonicParsing="false" onAction="#search" onMouseClicked="#search" prefHeight="25.0" prefWidth="52.0" text="Search" />
-      <TextField layoutX="175.0" layoutY="38.0" prefHeight="25.0" prefWidth="91.0" promptText="Media title.." />
+      <Button id="searchButton" fx:id="searchButton" layoutX="266.0" layoutY="38.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="52.0" text="Search" />
+      <TextField fx:id="searchField" layoutX="175.0" layoutY="38.0" prefHeight="25.0" prefWidth="91.0" promptText="Media title.." />
       <ComboBox fx:id="sortByComboBox" layoutX="336.0" layoutY="38.0" prefHeight="25.0" prefWidth="153.0" promptText="Sort by" />
       <ComboBox fx:id="genreComboBox" layoutX="507.0" layoutY="38.0" prefWidth="150.0" promptText="All genres" />
       <ComboBox fx:id="mediaComboBox" layoutX="675.0" layoutY="38.0" prefWidth="150.0" promptText="All media" />
