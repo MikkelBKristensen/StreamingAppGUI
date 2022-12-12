@@ -45,6 +45,7 @@ public class Controller implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
     @FXML
     private BorderPane borderPane;
     @FXML
@@ -63,7 +64,7 @@ public class Controller implements Initializable {
     private ComboBox<String> mediaComboBox;
 
     public void sortBy(MediaCollection mediaList, String sortBy) {
-        switch(sortBy) {
+        switch (sortBy) {
             case "Sort by" -> {
                 redrawMediaPane(mediaPane);
             }
@@ -109,7 +110,7 @@ public class Controller implements Initializable {
         @Override
         public void handle(ActionEvent actionEvent) {
 
-            switch(sortByComboBox.getValue()) {
+            switch (sortByComboBox.getValue()) {
                 case "Sort by" -> {
                     clearAndFillMediaList();
                     redrawMediaPane(mediaPane);
@@ -150,7 +151,7 @@ public class Controller implements Initializable {
         @Override
         public void handle(ActionEvent actionEvent) {
 
-            switch(genreComboBox.getValue()) {
+            switch (genreComboBox.getValue()) {
                 case "All Genres" -> {
                     try {
                         activeMediaList = primaryMediaList.getCollectionByType(mediaComboBox.getValue());
@@ -185,7 +186,7 @@ public class Controller implements Initializable {
                 System.out.println("Fuck");
             }
 
-            if(!genreComboBox.getValue().equals("All Genres")) {
+            if (!genreComboBox.getValue().equals("All Genres")) {
                 activeMediaList = activeMediaList.getCollectionByGenre(genreComboBox.getValue());
             }
             sortBy(activeMediaList, sortByComboBox.getValue());
@@ -196,10 +197,19 @@ public class Controller implements Initializable {
         @Override
         public void handle(KeyEvent event) {
             try {
-                activeMediaList = primaryMediaList.getCollectionByName(searchField.getText());
+                activeMediaList = primaryMediaList.getCollectionByType(mediaComboBox.getValue());
+                if (!genreComboBox.getValue().equals("All Genres")) {
+                    activeMediaList = activeMediaList.getCollectionByGenre(genreComboBox.getValue());
+                }
+                activeMediaList = activeMediaList.getCollectionByName(searchField.getText());
                 redrawMediaPane(mediaPane);
             } catch (MediaNotInArrayException e) {
                 Text error = new Text(searchField.getText() + " is not in the catalogue :)");
+                mediaPane.getChildren().clear();
+                mediaPane.getChildren().add(error);
+            } catch (FileNotLoadedException e) {
+                //TODO Change?
+                Text error = new Text("Critical system error");
                 mediaPane.getChildren().clear();
                 mediaPane.getChildren().add(error);
             }
@@ -224,16 +234,15 @@ public class Controller implements Initializable {
     private TextField searchField;
 
     // Making lists for comboBoxes
-    private final String[] sortByOptions = {"Sort by","Favorites", "Alphabetical (A-Z)","Alphabetical (Z-A)",
+    private final String[] sortByOptions = {"Sort by", "Favorites", "Alphabetical (A-Z)", "Alphabetical (Z-A)",
             "Rating (Highest first)", "Rating (Lowest first)", "Release year (Newest first)", "Release year (Oldest first)"};
     private final String[] profileOptions = {"Change name", "Change profile"};
 
     //TODO change genres to a HashMap that is filled by looping over all media
-    private final String[] genres = new String[]{"All Genres","Action","Adventure","Biography","Comedy","Crime","Drama",
-            "Family","Fantasy","Film-Noir","History","Horror","Music","Musical","Mystery","Romance","Sci-Fi",
-            "Sport","Talk-Show","Thriller","War","Western"};
+    private final String[] genres = new String[]{"All Genres", "Action", "Adventure", "Biography", "Comedy", "Crime", "Drama",
+            "Family", "Fantasy", "Film-Noir", "History", "Horror", "Music", "Musical", "Mystery", "Romance", "Sci-Fi",
+            "Sport", "Talk-Show", "Thriller", "War", "Western"};
     private final String[] mediaTypes = {"All media", "Movies", "Series"};
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -266,7 +275,7 @@ public class Controller implements Initializable {
 
         mediaPane.getChildren().clear();
 
-        for(Media media : activeMediaList.getMedia()) {
+        for (Media media : activeMediaList.getMedia()) {
             mediaPane.getChildren().add(mediaCard(media));
         }
     }
@@ -293,13 +302,13 @@ public class Controller implements Initializable {
     public Button addToFavorites(Media media) {
         Button addToFavorites;
 
-        if(profileList.getActiveProfile().getFavorites().contains(media.getTitle())) {
+        if (profileList.getActiveProfile().getFavorites().contains(media.getTitle())) {
             addToFavorites = new Button("Remove from favorites");
             addToFavorites.setOnMouseClicked((e) -> {
                 try {
                     profileList.getActiveProfile().removeFromFavorite(media.getTitle());
                     addToFavorites.setText("Add to favorites");
-                    if(sortByComboBox.getValue().equals("Favorites")) {
+                    if (sortByComboBox.getValue().equals("Favorites")) {
                         //activeMediaList.getMedia().clear();
                         activeMediaList = primaryMediaList.getCollectionByName(profileList.getActiveProfile().getFavorites());
                     }
@@ -385,5 +394,4 @@ public class Controller implements Initializable {
 
         // Hello baby gurl
     }
-
 }
