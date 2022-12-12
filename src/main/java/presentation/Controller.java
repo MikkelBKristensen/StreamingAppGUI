@@ -324,7 +324,7 @@ public class Controller implements Initializable {
                 }
             });
         } else {
-            addToFavorites = new Button("Add to favorite");
+            addToFavorites = new Button("Add to favorites");
             addToFavorites.setOnMouseClicked((e) -> {
                 try {
                     profileList.getActiveProfile().addToFavorite(media.getTitle());
