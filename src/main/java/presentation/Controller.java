@@ -155,12 +155,23 @@ public class Controller implements Initializable {
 
             switch(genreComboBox.getValue()) {
                 case "All Genres" -> {
-                    clearAndFillMediaList();
+                    try {
+                        activeMediaList = primaryMediaList.getCollectionByType(mediaComboBox.getValue());
+                    } catch (IOException e) {
+                        //TODO man
+                        System.out.println("Fuck");
+                    }
                     sortBy(activeMediaList, sortByComboBox.getValue());
                     redrawMediaPane(mediaPane);
                 }
                 default -> {
-                    activeMediaList = primaryMediaList.getCollectionByGenre(genreComboBox.getValue());
+                    try {
+                        activeMediaList = primaryMediaList.getCollectionByType(mediaComboBox.getValue());
+                    } catch (IOException e) {
+                        //TODO man
+                        System.out.println("Fuck");
+                    }
+                    activeMediaList = activeMediaList.getCollectionByGenre(genreComboBox.getValue());
                     sortBy(activeMediaList, sortByComboBox.getValue());
                     redrawMediaPane(mediaPane);
                 }
@@ -170,22 +181,18 @@ public class Controller implements Initializable {
     EventHandler<ActionEvent> mediaComboBoxHandler = new EventHandler<>() {
         @Override
         public void handle(ActionEvent actionEvent) {
-            switch (mediaComboBox.getValue()) {
-                case "All media" -> {
-                    clearAndFillMediaList();
-                    sortBy(activeMediaList, sortByComboBox.getValue());
-                    redrawMediaPane(mediaPane);
-                }
-                default -> {
-                    try {
-                        activeMediaList = primaryMediaList.getCollectionByType(mediaComboBox.getValue());
-                        sortBy(activeMediaList, sortByComboBox.getValue());
-                        redrawMediaPane(mediaPane);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+            try {
+                activeMediaList = primaryMediaList.getCollectionByType(mediaComboBox.getValue());
+            } catch (IOException e) {
+                //TODO man
+                System.out.println("Fuck");
             }
+
+            if(!genreComboBox.getValue().equals("All Genres")) {
+                activeMediaList = activeMediaList.getCollectionByGenre(genreComboBox.getValue());
+            }
+            sortBy(activeMediaList, sortByComboBox.getValue());
+            redrawMediaPane(mediaPane);
         }
     };
     EventHandler<ActionEvent> enactSearch = new EventHandler<>() {

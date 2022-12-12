@@ -86,7 +86,6 @@ public class MediaList implements MediaCollection {
             case "Series" -> listOfMedia = DataHandler.getInstance().assembleSeriesList();
             default -> {
                 listOfMedia = DataHandler.getInstance().assembleMediaList();
-                throw new IllegalArgumentException();
             }
         }
         return new MediaList(listOfMedia);
