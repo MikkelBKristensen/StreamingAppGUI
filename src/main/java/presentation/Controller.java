@@ -27,6 +27,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -201,7 +203,7 @@ public class Controller implements Initializable {
     //TODO The commented out code doesn't work as intentional. It only clears the pane when used with empty searchField. With any input, it does nothing(Seemingly).
     @FXML
     public void search(MouseEvent event) throws MediaNotInArrayException {
-        /*String searchedName = searchTextField.getText();
+        String searchedName = searchTextField.getText();
         //Set activeMediaList = new collection with all activeMediaList.getMedia().getTitle().contains(searcedName)
         List<String> listOfMedia = new ArrayList<>();
         for (Media media : activeMediaList.getMedia()) {
@@ -210,12 +212,14 @@ public class Controller implements Initializable {
             }
         }
         activeMediaList = activeMediaList.getCollectionByName(listOfMedia);
-        redrawMediaPane(mediaPane);*/
+        redrawMediaPane(mediaPane);
     }
 
     @FXML
     public void setDefault(MouseEvent event) {
-        searchTextField.clear();
+        if (!(searchTextField == null)) {
+            searchTextField.clear();
+        }
         sortByComboBox.setValue("Sort by");
         genreComboBox.setValue("All Genres");
         mediaComboBox.setValue("All media");
