@@ -205,14 +205,18 @@ public class Controller implements Initializable {
     public void search(MouseEvent event) throws MediaNotInArrayException {
         String searchedName = searchTextField.getText();
         //Set activeMediaList = new collection with all activeMediaList.getMedia().getTitle().contains(searcedName)
+        /*String searchedName = searchTextField.getText();
+        //Set activeMediaList = new collection with all activeMediaList.getMedia().getTitle().contains(searchedName)
         List<String> listOfMedia = new ArrayList<>();
-        for (Media media : activeMediaList.getMedia()) {
+        for (Media media : primaryMediaList.getMedia()) {
             if (media.getTitle().contains(searchedName)) {
                 listOfMedia.add(media.getTitle());
             }
         }
         activeMediaList = activeMediaList.getCollectionByName(listOfMedia);
         redrawMediaPane(mediaPane);
+        activeMediaList = primaryMediaList.getCollectionByName(listOfMedia);
+        redrawMediaPane(mediaPane);*/
     }
 
     @FXML
