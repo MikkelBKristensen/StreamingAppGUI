@@ -41,11 +41,13 @@ public class ProfileList implements ProfileCollection {
     public void deleteProfile(int id) throws FileNotSavedException {
 
         File profileFile = new File("lib/profiles/" + id + ".txt");
-        //TODO ?Que pasa Exeptioooon?
-        if(profileFile.delete()) {
-            profileMap.remove(id);
-            dataHandler.saveProfileMap(profileMap);
+
+        if(!profileFile.delete()) {
+            throw new FileNotSavedException(profileFile);
         }
+
+        profileMap.remove(id);
+        dataHandler.saveProfileMap(profileMap);
     }
     public void setActiveProfile(int id) {
         activeProfile = profileMap.get(id);

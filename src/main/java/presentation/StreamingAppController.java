@@ -28,15 +28,14 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.security.Key;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class StreamingAppController implements Initializable {
     private final MediaCollection primaryMediaList;
     private MediaCollection activeMediaList;
     private ProfileCollection profileList;
 
-    public Controller() {
+    public StreamingAppController() {
         try {
             primaryMediaList = new MediaList();
             activeMediaList = new MediaList();
@@ -63,7 +62,7 @@ public class Controller implements Initializable {
     @FXML
     private ComboBox<String> mediaComboBox;
 
-    public void sortBy(MediaCollection mediaList, String sortBy) {
+    private void sortBy(MediaCollection mediaList, String sortBy) {
         switch (sortBy) {
             case "Sort by" -> {
                 redrawMediaPane(mediaPane);
@@ -216,7 +215,6 @@ public class Controller implements Initializable {
         }
     };
 
-    //TODO The commented out code doesn't work as intentional. It only clears the pane when used with empty searchField. With any input, it does nothing(Seemingly).
     @FXML
     public void setDefault(MouseEvent event) {
         if (!(searchTextField == null)) {
@@ -271,7 +269,7 @@ public class Controller implements Initializable {
     }
 
     //Used to draw the mediaPane on initialization, or whenever the mediaList has been altered in any way.
-    public void redrawMediaPane(FlowPane mediaPane) {
+    private void redrawMediaPane(FlowPane mediaPane) {
 
         mediaPane.getChildren().clear();
 
@@ -281,7 +279,7 @@ public class Controller implements Initializable {
     }
 
     //Used to generate the cards containing media.
-    public VBox mediaCard(Media media) {
+    private VBox mediaCard(Media media) {
 
         VBox mediaCard = new VBox();
         ImageView mediaPosterWrapper = new ImageView(new Image(media.getPosterURL()));
@@ -299,7 +297,7 @@ public class Controller implements Initializable {
         return mediaCard;
     }
 
-    public Button addToFavorites(Media media) {
+    private Button addToFavorites(Media media) {
         Button addToFavorites;
 
         if (profileList.getActiveProfile().getFavorites().contains(media.getTitle())) {
@@ -309,7 +307,6 @@ public class Controller implements Initializable {
                     profileList.getActiveProfile().removeFromFavorite(media.getTitle());
                     addToFavorites.setText("Add to favorites");
                     if (sortByComboBox.getValue().equals("Favorites")) {
-                        //activeMediaList.getMedia().clear();
                         activeMediaList = primaryMediaList.getCollectionByName(profileList.getActiveProfile().getFavorites());
                     }
                     redrawMediaPane(mediaPane);
@@ -332,7 +329,11 @@ public class Controller implements Initializable {
             addToFavorites.setOnMouseClicked((e) -> {
                 try {
                     profileList.getActiveProfile().addToFavorite(media.getTitle());
-                    addToFavorites.setText("Added to favorites");
+                    addToFavorites.setText("Remove from favorites");
+                    if (sortByComboBox.getValue().equals("Favorites")) {
+                        activeMediaList = primaryMediaList.getCollectionByName(profileList.getActiveProfile().getFavorites());
+                    }
+                    redrawMediaPane(mediaPane);
                 } catch (MediaAlreadyInArrayException error) {
                     Alert alreadyInFavorites = new Alert(Alert.AlertType.ERROR);
                     alreadyInFavorites.setTitle("Error");
@@ -352,7 +353,7 @@ public class Controller implements Initializable {
     }
 
     // Pop up window when clicking on mediaCard
-    public void singleMediaPane(Media media) {
+    private void singleMediaPane(Media media) {
 
         VBox singleMediaPane = new VBox();
         HBox genreBox = new HBox();
