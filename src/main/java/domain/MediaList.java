@@ -68,7 +68,6 @@ public class MediaList implements MediaCollection {
 
         return new MediaList(listOfMedia);
     }
-
     public Media getMediaByName(String chosenMedia) throws MediaNotInArrayException {
 
         for(Media media : media) {

@@ -34,7 +34,7 @@ public class FileHandlerImpl implements FileHandler {
     public void saveFile(List<String> saveData, File file) throws FileNotSavedException {
 
         if(saveData == null || file == null) {
-            throw new FileNotSavedException("Savedata or specified file is of value null: Internal systems error");
+            throw new FileNotSavedException("Savedata or specified file is of value null");
         }
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(file, true))) {
@@ -58,7 +58,7 @@ public class FileHandlerImpl implements FileHandler {
     public void saveFileOverwrite(List<String> saveData, File file) throws FileNotSavedException {
 
         if(saveData == null || file == null) {
-            throw new FileNotSavedException("Savedata or specified file is of value null: Internal systems error");
+            throw new FileNotSavedException("Savedata or specified file is of value null");
         }
 
         try (PrintWriter writer = new PrintWriter(file)) {
@@ -77,7 +77,7 @@ public class FileHandlerImpl implements FileHandler {
     }
 
 
-    public String getImageURL(String title, String mediaType) {
+    public String getImageURL(String title, String mediaType) throws FileNotLoadedException {
         if(mediaType.equals("film")) {
 
             File imageFile = new File("lib/media/" + mediaType + "plakater/" + title + ".jpg");

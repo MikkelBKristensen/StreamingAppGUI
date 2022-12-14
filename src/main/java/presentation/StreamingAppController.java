@@ -19,7 +19,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -41,68 +40,60 @@ public class StreamingAppController implements Initializable {
             activeMediaList = new MediaList();
             profileList = new ProfileList();
         } catch (FileNotLoadedException e) {
-            throw new RuntimeException(e);
+            Alert alreadyInFavorites = new Alert(Alert.AlertType.ERROR);
+            alreadyInFavorites.setTitle("Error");
+            alreadyInFavorites.setHeaderText("NetflixGoHome could not load movies or series");
+            alreadyInFavorites.setContentText(e.getMessage());
+            alreadyInFavorites.showAndWait();
+            throw new RuntimeException();
         }
     }
 
-    @FXML
-    private BorderPane borderPane;
-    @FXML
-    private Button logoButton;
-    @FXML
-    private TextField searchTextField;
-    @FXML
-    private Button searchButton;
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        // Adding lists to comboBoxes
+        sortByComboBox.getItems().addAll(sortByOptions);
+        genreComboBox.getItems().addAll(genres);
+        mediaComboBox.getItems().addAll(mediaTypes);
+        profileComboBox.getItems().addAll(profileOptions);
+
+        sortByComboBox.setValue("Sort by");
+        genreComboBox.setValue("All Genres");
+        mediaComboBox.setValue("All media");
+
+        //Set Active profile
+        profileList.setActiveProfile(1);
+
+        //Add event handlers.
+        sortByComboBox.addEventFilter(ActionEvent.ACTION, sortByComboHandler);
+        genreComboBox.addEventFilter(ActionEvent.ACTION, genreComboBoxHandler);
+        mediaComboBox.addEventFilter(ActionEvent.ACTION, mediaComboBoxHandler);
+        searchField.addEventFilter(KeyEvent.ANY, searchBoxHandler);
+
+        //Draw the mediaPane to fill up with most recent mediaList;
+        redrawMediaPane(mediaPane);
+    }
+
     @FXML
     private ComboBox<String> sortByComboBox;
+    private final String[] sortByOptions = {"Sort by", "Favorites", "Alphabetical (A-Z)", "Alphabetical (Z-A)",
+            "Rating (Highest first)", "Rating (Lowest first)", "Release year (Newest first)", "Release year (Oldest first)"};
     @FXML
     private ComboBox<String> profileComboBox;
+    private final String[] profileOptions = {"Change name", "Change profile"};
     @FXML
     private ComboBox<String> genreComboBox;
+    private final String[] genres = new String[]{"All Genres", "Action", "Adventure", "Biography", "Comedy", "Crime", "Drama",
+            "Family", "Fantasy", "Film-Noir", "History", "Horror", "Music", "Musical", "Mystery", "Romance", "Sci-Fi",
+            "Sport", "Talk-Show", "Thriller", "War", "Western"};
     @FXML
     private ComboBox<String> mediaComboBox;
-
-    private void sortBy(MediaCollection mediaList, String sortBy) {
-        switch (sortBy) {
-            case "Sort by" -> {
-                redrawMediaPane(mediaPane);
-            }
-            case "Favorites" -> {
-                activeMediaList = primaryMediaList.getCollectionByName(profileList.getActiveProfile().getFavorites());
-                redrawMediaPane(mediaPane);
-            }
-            case "Alphabetical (A-Z)" -> {
-                activeMediaList.sortByAlphabetical();
-                redrawMediaPane(mediaPane);
-            }
-            case "Alphabetical (Z-A)" -> {
-                activeMediaList.sortByAlphabeticalReverse();
-                redrawMediaPane(mediaPane);
-            }
-            case "Rating (Highest first)" -> {
-                activeMediaList.sortByRating();
-                redrawMediaPane(mediaPane);
-            }
-            case "Rating (Lowest first)" -> {
-                activeMediaList.sortByRatingReverse();
-                redrawMediaPane(mediaPane);
-            }
-            case "Release year (Newest first)" -> {
-                activeMediaList.sortByReleaseYearReverse();
-                redrawMediaPane(mediaPane);
-            }
-            case "Release year (Oldest first)" -> {
-                activeMediaList.sortByReleaseYear();
-                redrawMediaPane(mediaPane);
-            }
-        }
-    }
-
-    // *** Helper methods ***
-    private void clearAndFillMediaList() {
-        activeMediaList.getMedia().clear();
-        activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
-    }
+    private final String[] mediaTypes = {"All media", "Movies", "Series"};
+    @FXML
+    private FlowPane mediaPane;
+    @FXML
+    private TextField searchField;
 
     // *** ActionEvents ***
     EventHandler<ActionEvent> sortByComboHandler = new EventHandler<>() {
@@ -146,6 +137,7 @@ public class StreamingAppController implements Initializable {
             }
         }
     };
+
     EventHandler<ActionEvent> genreComboBoxHandler = new EventHandler<>() {
         @Override
         public void handle(ActionEvent actionEvent) {
@@ -154,9 +146,8 @@ public class StreamingAppController implements Initializable {
                 case "All Genres" -> {
                     try {
                         activeMediaList = primaryMediaList.getCollectionByType(mediaComboBox.getValue());
-                    } catch (IOException e) {
-                        //TODO man
-                        System.out.println("Fuck");
+                    } catch (FileNotLoadedException e) {
+                        getCollectionByTypeAlert(e);
                     }
                     sortBy(activeMediaList, sortByComboBox.getValue());
                     redrawMediaPane(mediaPane);
@@ -164,9 +155,8 @@ public class StreamingAppController implements Initializable {
                 default -> {
                     try {
                         activeMediaList = primaryMediaList.getCollectionByType(mediaComboBox.getValue());
-                    } catch (IOException e) {
-                        //TODO man
-                        System.out.println("Fuck");
+                    } catch (FileNotLoadedException e) {
+                        getCollectionByTypeAlert(e);
                     }
                     activeMediaList = activeMediaList.getCollectionByGenre(genreComboBox.getValue());
                     sortBy(activeMediaList, sortByComboBox.getValue());
@@ -181,8 +171,7 @@ public class StreamingAppController implements Initializable {
             try {
                 activeMediaList = primaryMediaList.getCollectionByType(mediaComboBox.getValue());
             } catch (IOException e) {
-                //TODO man
-                System.out.println("Fuck");
+                getCollectionByTypeAlert(e);
             }
 
             if (!genreComboBox.getValue().equals("All Genres")) {
@@ -203,71 +192,63 @@ public class StreamingAppController implements Initializable {
                 activeMediaList = activeMediaList.getCollectionByName(searchField.getText());
                 redrawMediaPane(mediaPane);
             } catch (MediaNotInArrayException e) {
-                Text error = new Text(searchField.getText() + " is not in the catalogue :)");
+                Text error = new Text(searchField.getText() + " does not match any media in the current filtering.");
                 mediaPane.getChildren().clear();
                 mediaPane.getChildren().add(error);
             } catch (FileNotLoadedException e) {
-                //TODO Change?
-                Text error = new Text("Critical system error");
-                mediaPane.getChildren().clear();
-                mediaPane.getChildren().add(error);
+                Alert alreadyInFavorites = new Alert(Alert.AlertType.ERROR);
+                alreadyInFavorites.setTitle("Error");
+                alreadyInFavorites.setHeaderText("Could not load media to mediaPane");
+                alreadyInFavorites.setContentText(e.getMessage());
+                alreadyInFavorites.showAndWait();
             }
         }
     };
 
+    private void sortBy(MediaCollection mediaList, String sortBy) {
+        switch (sortBy) {
+            case "Sort by" -> {
+                redrawMediaPane(mediaPane);
+            }
+            case "Favorites" -> {
+                activeMediaList = primaryMediaList.getCollectionByName(profileList.getActiveProfile().getFavorites());
+                redrawMediaPane(mediaPane);
+            }
+            case "Alphabetical (A-Z)" -> {
+                activeMediaList.sortByAlphabetical();
+                redrawMediaPane(mediaPane);
+            }
+            case "Alphabetical (Z-A)" -> {
+                activeMediaList.sortByAlphabeticalReverse();
+                redrawMediaPane(mediaPane);
+            }
+            case "Rating (Highest first)" -> {
+                activeMediaList.sortByRating();
+                redrawMediaPane(mediaPane);
+            }
+            case "Rating (Lowest first)" -> {
+                activeMediaList.sortByRatingReverse();
+                redrawMediaPane(mediaPane);
+            }
+            case "Release year (Newest first)" -> {
+                activeMediaList.sortByReleaseYearReverse();
+                redrawMediaPane(mediaPane);
+            }
+            case "Release year (Oldest first)" -> {
+                activeMediaList.sortByReleaseYear();
+                redrawMediaPane(mediaPane);
+            }
+        }
+    }
     @FXML
-    public void setDefault(MouseEvent event) {
-        if (!(searchTextField == null)) {
-            searchTextField.clear();
+    private void setDefault(MouseEvent event) {
+        if (searchField.getText() != null) {
+            searchField.clear();
         }
         sortByComboBox.setValue("Sort by");
         genreComboBox.setValue("All Genres");
         mediaComboBox.setValue("All media");
     }
-
-    @FXML
-    private FlowPane mediaPane;
-
-    @FXML
-    private TextField searchField;
-
-    // Making lists for comboBoxes
-    private final String[] sortByOptions = {"Sort by", "Favorites", "Alphabetical (A-Z)", "Alphabetical (Z-A)",
-            "Rating (Highest first)", "Rating (Lowest first)", "Release year (Newest first)", "Release year (Oldest first)"};
-    private final String[] profileOptions = {"Change name", "Change profile"};
-
-    //TODO change genres to a HashMap that is filled by looping over all media
-    private final String[] genres = new String[]{"All Genres", "Action", "Adventure", "Biography", "Comedy", "Crime", "Drama",
-            "Family", "Fantasy", "Film-Noir", "History", "Horror", "Music", "Musical", "Mystery", "Romance", "Sci-Fi",
-            "Sport", "Talk-Show", "Thriller", "War", "Western"};
-    private final String[] mediaTypes = {"All media", "Movies", "Series"};
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        // Adding lists to comboBoxes
-        sortByComboBox.getItems().addAll(sortByOptions);
-        genreComboBox.getItems().addAll(genres);
-        mediaComboBox.getItems().addAll(mediaTypes);
-        profileComboBox.getItems().addAll(profileOptions);
-
-        sortByComboBox.setValue("Sort by");
-        genreComboBox.setValue("All Genres");
-        mediaComboBox.setValue("All media");
-
-        //Set Active profile
-        profileList.setActiveProfile(1);
-
-        //Add event handlers.
-        sortByComboBox.addEventFilter(ActionEvent.ACTION, sortByComboHandler);
-        genreComboBox.addEventFilter(ActionEvent.ACTION, genreComboBoxHandler);
-        mediaComboBox.addEventFilter(ActionEvent.ACTION, mediaComboBoxHandler);
-        searchField.addEventFilter(KeyEvent.ANY, searchBoxHandler);
-
-        //Draw the mediaPane to fill up with most recent mediaList;
-        redrawMediaPane(mediaPane);
-    }
-
     //Used to draw the mediaPane on initialization, or whenever the mediaList has been altered in any way.
     private void redrawMediaPane(FlowPane mediaPane) {
 
@@ -297,34 +278,12 @@ public class StreamingAppController implements Initializable {
         return mediaCard;
     }
 
+    //Add to favorites button
     private Button addToFavorites(Media media) {
+
         Button addToFavorites;
 
-        if (profileList.getActiveProfile().getFavorites().contains(media.getTitle())) {
-            addToFavorites = new Button("Remove from favorites");
-            addToFavorites.setOnMouseClicked((e) -> {
-                try {
-                    profileList.getActiveProfile().removeFromFavorite(media.getTitle());
-                    addToFavorites.setText("Add to favorites");
-                    if (sortByComboBox.getValue().equals("Favorites")) {
-                        activeMediaList = primaryMediaList.getCollectionByName(profileList.getActiveProfile().getFavorites());
-                    }
-                    redrawMediaPane(mediaPane);
-                } catch (MediaNotInArrayException error) {
-                    Alert alreadyInFavorites = new Alert(Alert.AlertType.ERROR);
-                    alreadyInFavorites.setTitle("Error");
-                    alreadyInFavorites.setHeaderText("Could not remove from favorites");
-                    alreadyInFavorites.setContentText(error.getMessage());
-                    alreadyInFavorites.showAndWait();
-                } catch (FileNotSavedException error) {
-                    Alert alreadyInFavorites = new Alert(Alert.AlertType.ERROR);
-                    alreadyInFavorites.setTitle("Error");
-                    alreadyInFavorites.setHeaderText("Could not save favorites to disc");
-                    alreadyInFavorites.setContentText(error.getMessage());
-                    alreadyInFavorites.showAndWait();
-                }
-            });
-        } else {
+        if(!profileList.getActiveProfile().getFavorites().contains(media.getTitle())) {
             addToFavorites = new Button("Add to favorites");
             addToFavorites.setOnMouseClicked((e) -> {
                 try {
@@ -348,7 +307,33 @@ public class StreamingAppController implements Initializable {
                     alreadyInFavorites.showAndWait();
                 }
             });
+            return addToFavorites;
         }
+
+        addToFavorites = new Button("Remove from favorites");
+        addToFavorites.setOnMouseClicked((e) -> {
+            try {
+                profileList.getActiveProfile().removeFromFavorite(media.getTitle());
+                addToFavorites.setText("Add to favorites");
+                if (sortByComboBox.getValue().equals("Favorites")) {
+                    activeMediaList = primaryMediaList.getCollectionByName(profileList.getActiveProfile().getFavorites());
+                }
+                redrawMediaPane(mediaPane);
+            } catch (MediaNotInArrayException error) {
+                Alert alreadyInFavorites = new Alert(Alert.AlertType.ERROR);
+                alreadyInFavorites.setTitle("Error");
+                alreadyInFavorites.setHeaderText("Could not remove from favorites");
+                alreadyInFavorites.setContentText(error.getMessage());
+                alreadyInFavorites.showAndWait();
+            } catch (FileNotSavedException error) {
+                Alert alreadyInFavorites = new Alert(Alert.AlertType.ERROR);
+                alreadyInFavorites.setTitle("Error");
+                alreadyInFavorites.setHeaderText("Could not save favorites to disc");
+                alreadyInFavorites.setContentText(error.getMessage());
+                alreadyInFavorites.showAndWait();
+            }
+        });
+
         return addToFavorites;
     }
 
@@ -392,7 +377,19 @@ public class StreamingAppController implements Initializable {
         stage.centerOnScreen();
         stage.setScene(scene);
         stage.show();
-
-        // Hello baby gurl
     }
+
+    // *** Helper methods ***
+    private void clearAndFillMediaList() {
+        activeMediaList.getMedia().clear();
+        activeMediaList.getMedia().addAll(primaryMediaList.getMedia());
+    }
+
+    private void getCollectionByTypeAlert(Exception exception) {
+        Alert FileNotLoadedAlert = new Alert(Alert.AlertType.ERROR);
+        FileNotLoadedAlert.setTitle("Error");
+        FileNotLoadedAlert.setHeaderText("Could not render mediaPane");
+        FileNotLoadedAlert.setContentText(exception.getMessage());
+        FileNotLoadedAlert.showAndWait();
+    };
 }

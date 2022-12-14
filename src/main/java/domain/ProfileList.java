@@ -30,13 +30,12 @@ public class ProfileList implements ProfileCollection {
         currentID++;
 
         //push new profile to the Map.
-        profileMap.merge(newProfile.getId(), newProfile, (a, b) -> a = b);
+        profileMap.merge(newProfile.getId(), newProfile, (a, b) -> b);
 
         //save the profile and newly modified profileMap to disc.
         dataHandler.saveProfile(newProfile);
         dataHandler.saveProfileMap(profileMap);
     }
-
     @Override
     public void deleteProfile(int id) throws FileNotSavedException {
 
@@ -58,11 +57,9 @@ public class ProfileList implements ProfileCollection {
     public Map<Integer, Profile> getProfileMap() {
         return profileMap;
     }
-
     public Profile getProfile(int id) {
         return profileMap.get(id);
     };
-
     private int getMaxID() {
         int highestID = Integer.MIN_VALUE;
         for (int ID : profileMap.keySet()) {
@@ -72,5 +69,4 @@ public class ProfileList implements ProfileCollection {
         }
         return highestID;
     }
-
 }

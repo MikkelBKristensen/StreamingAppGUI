@@ -15,7 +15,6 @@ public class StreamingApp extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         primaryStage.setMaximized(true);
         primaryStage.setTitle("Netflix Go Home");
-
         primaryStage.setScene(scene);
         primaryStage.show();
     }

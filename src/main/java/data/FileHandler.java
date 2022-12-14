@@ -11,5 +11,5 @@ public interface FileHandler {
     List<String> loadFile(File file) throws FileNotLoadedException;
     void saveFile(List<String> saveData, File file) throws FileNotSavedException;
     void saveFileOverwrite(List<String> saveData, File file) throws FileNotSavedException;
-    String getImageURL(String title, String mediaType);
+    String getImageURL(String title, String mediaType) throws FileNotLoadedException;
 }
