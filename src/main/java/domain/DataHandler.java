@@ -4,7 +4,6 @@ import data.FileHandler;
 import data.FileHandlerImpl;
 import exceptions.FileNotLoadedException;
 import exceptions.FileNotSavedException;
-import javafx.scene.image.Image;
 
 import java.io.File;
 import java.util.List;
@@ -74,7 +73,7 @@ public class DataHandler {
             String title = profileData.get(1);
             List<String> favourites = profileData.subList(2, profileData.size());
 
-            profileMap.merge(id, new Profile(id, title, favourites), (a, b) -> a = b);
+            profileMap.merge(id, new Profile(id, title, favourites), (a, b) -> b);
 
         }
         return profileMap;
@@ -114,7 +113,12 @@ public class DataHandler {
         // Splits the genre entry into a new array, and saves this in an arrayList called genres
         ArrayList<String> genres = new ArrayList<>(Arrays.asList(dataEntries[2].split(",")));
         double rating = Double.parseDouble(dataEntries[3]);
-        String poster = fileHandler.getImageURL(title, "film");
+        String poster = null;
+        try {
+            poster = fileHandler.getImageURL(title, "film");
+        } catch (FileNotLoadedException e) {
+            poster = new File ("lib/media/filmplakater/Placeholder.jpg").toURI().toString();
+        }
 
         return new Movie(title, releaseYear, genres, rating, poster);
     }
@@ -128,7 +132,12 @@ public class DataHandler {
         double rating = Double.parseDouble(dataEntries[3]);
         int seasons = dataEntries[4].split(",").length;
         Map<Integer, Integer> seasonsEpisodes = seasonEpisodeMapAssembler(dataEntries[4].split(","));
-        String poster = fileHandler.getImageURL(title, "serie");
+        String poster = null;
+        try {
+            poster = fileHandler.getImageURL(title, "serie");
+        } catch (FileNotLoadedException e) {
+            poster = new File ("lib/media/filmplakater/Placeholder.jpg").toURI().toString();
+        }
 
         return new Series(title, releaseYear, genres, rating, poster, seasons, seasonsEpisodes);
     }
@@ -159,7 +168,7 @@ public class DataHandler {
             String[] newArray = index.split("-");
 
             if(newArray.length >= 2) {
-                seasonEpisodeMap.merge(Integer.parseInt(newArray[0]), Integer.parseInt(newArray[1]), (a, b) -> a = b);
+                seasonEpisodeMap.merge(Integer.parseInt(newArray[0]), Integer.parseInt(newArray[1]), (a, b) -> b);
             }
         }
 

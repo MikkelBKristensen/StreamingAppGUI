@@ -2,6 +2,8 @@ package domain;
 
 import data.FileHandler;
 import data.FileHandlerImpl;
+import exceptions.FileNotLoadedException;
+import exceptions.FileNotSavedException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,46 +37,44 @@ class DataHandlerTest {
     }
 
     @Test
-    void assembleMediaList() {
+    void assembleMediaListContainsAllMedia() {
 
         List<Media> mediaList = null;
 
         try {
             mediaList = dataHandler.assembleMediaList();
-        } catch(IOException | IllegalArgumentException e) {
-            fail("MediaList could not be assembled");
+        } catch(FileNotLoadedException e) {
+            fail(e.getMessage());
         }
 
         assert(mediaList.size() == 200);
 
     }
 
-    //Done
     @Test
-    void assembleMovieList() {
+    void assembleMovieListContainsAllMovies() {
 
         List<Media> movieList = null;
 
         try {
             movieList = dataHandler.assembleMovieList();
-        } catch(IOException | IllegalArgumentException e) {
-            fail("movieList could not be assembled");
+        } catch(FileNotLoadedException e) {
+            fail(e.getMessage());
         }
 
         assert(movieList.size() == 100);
 
     }
 
-    //Done
     @Test
-    void assembleSeriesList() {
+    void assembleSeriesListContainsAllSeries() {
 
         List<Media> seriesList = null;
 
         try {
             seriesList = dataHandler.assembleSeriesList();
-        } catch(IOException | IllegalArgumentException e) {
-            fail("seriesList could not be assembled");
+        } catch(FileNotLoadedException e) {
+            fail(e.getMessage());
         }
 
         assert(seriesList.size() == 100);
@@ -82,7 +82,7 @@ class DataHandlerTest {
     }
 
     @Test
-    void assembleProfileMap() {
+    void assembleProfileMapConatinsAllProfiles() {
 
         Map<Integer, Profile> profileMap = null;
         int profilesAmount = -1;
@@ -90,8 +90,8 @@ class DataHandlerTest {
         try {
             profilesAmount = fileHandler.loadFile(new File("lib/profiles/profileIds.txt")).size();
             profileMap = dataHandler.assembleProfileMap();
-        } catch (IOException e) {
-            fail("ProfileMap could not be assembled, or profilesAmount could not be determined");
+        } catch (FileNotLoadedException e) {
+            fail(e.getMessage());
         }
 
         assert(profileMap.keySet().size() == profilesAmount );
@@ -99,7 +99,7 @@ class DataHandlerTest {
     }
 
     @Test
-    void saveProfile() {
+    void saveProfileSavesAndIsLoadable() {
 
         int testId = 1026245;
         String profileName = stringGenerator(10);
@@ -116,8 +116,10 @@ class DataHandlerTest {
         try {
             dataHandler.saveProfile(testProfile);
             loadedProfileData = fileHandler.loadFile(new File("lib/profiles/1026245.txt"));
-        } catch (IOException e) {
-            fail("Test profile could not be loaded");
+        } catch (FileNotSavedException e) {
+            fail(e.getMessage());
+        } catch (FileNotLoadedException e) {
+            fail(e.getMessage());
         }
 
         loadedFavorites = loadedProfileData.subList(2, loadedProfileData.size());
@@ -128,7 +130,7 @@ class DataHandlerTest {
     }
 
     @Test
-    void saveProfileMap() {
+    void saveProfileMapSavesAndIsLoadable() {
 
         Map<Integer, Profile> profileMap = null;
         Map<Integer, Profile> comparatorProfileMap = null;
@@ -141,35 +143,26 @@ class DataHandlerTest {
 
         try {
             profileMap = dataHandler.assembleProfileMap();
-        } catch(IOException e) {
-            fail("profileMap could not be assembled");
+        } catch(FileNotLoadedException e) {
+            fail(e.getMessage());
         }
 
-        profileMap.merge(addedProfile.getId(), addedProfile, (a,b) -> a = b);
+        profileMap.merge(addedProfile.getId(), addedProfile, (a,b) -> b);
 
         try {
             dataHandler.saveProfileMap(profileMap);
             dataHandler.saveProfile(addedProfile);
             comparatorProfileMap = dataHandler.assembleProfileMap();
-        } catch (IOException e) {
-            fail("Map could not be saved or profileMap could not be assembled");
+        } catch (FileNotSavedException e) {
+            fail(e.getMessage());
+        } catch (FileNotLoadedException e) {
+            fail(e.getMessage());
         }
 
         for(int profileId : comparatorProfileMap.keySet()) {
             assert(profileMap.containsKey(profileId));
         }
     }
-
-    //TODO Complete test
-   /* @Test
-    void saveFavoritesToProfile() {
-
-        List<String> saveData = new ArrayList<>;
-        List<String> comparisonData = null;
-
-        s
-
-    }*/
 
     private String stringGenerator(int size) {
 

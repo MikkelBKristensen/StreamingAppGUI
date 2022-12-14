@@ -4,7 +4,6 @@ import exceptions.FileNotSavedException;
 import exceptions.MediaAlreadyInArrayException;
 import exceptions.MediaNotInArrayException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,31 +23,24 @@ public class Profile {
     public void addToFavorite(String mediaName) throws MediaAlreadyInArrayException, FileNotSavedException {
         if (favorites.contains(mediaName)) {
             throw new MediaAlreadyInArrayException(mediaName);
-        } else {
-            favorites.add(mediaName);
-            dataHandler.saveToProfileFavourites(mediaName, id);
         }
+        favorites.add(mediaName);
+        dataHandler.saveToProfileFavourites(mediaName, id);
     }
 
     public void removeFromFavorite(String mediaName) throws MediaNotInArrayException, FileNotSavedException {
-        if (favorites.contains(mediaName)) {
-            favorites.remove(mediaName);
-            dataHandler.saveProfile(this);
-        } else {
+        if(!favorites.contains(mediaName)) {
             throw new MediaNotInArrayException(mediaName);
         }
+        favorites.remove(mediaName);
+        dataHandler.saveProfile(this);
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws FileNotSavedException {
 
         this.name = name.replaceAll("[^A-Za-z0-9]","");
 
-        try {
-            dataHandler.saveProfile(this);
-        } catch (IOException e) {
-            System.out.println("fuck");
-            //TODO proper exception FileNotSaved
-        }
+        dataHandler.saveProfile(this);
     }
 
     public String getName() {

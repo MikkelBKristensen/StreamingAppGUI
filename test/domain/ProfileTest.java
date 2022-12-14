@@ -77,7 +77,11 @@ public class ProfileTest {
         Profile testProfile = profileCollection.getProfile(10123761);
         String randomName = stringGenerator(40);
 
-        testProfile.setName(randomName);
+        try {
+            testProfile.setName(randomName);
+        } catch (FileNotSavedException e) {
+            throw new RuntimeException(e);
+        }
 
         try {
             testProfile = new ProfileList().getProfile(10123761);
