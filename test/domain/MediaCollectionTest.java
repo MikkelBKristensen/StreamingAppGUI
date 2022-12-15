@@ -48,8 +48,6 @@ class MediaCollectionTest {
         }
     }
 
-    //TODO write search function test
-
     @Test
     void sortByRating() {
         List<String> mediaToFetch = new ArrayList<>(Arrays.asList("Game of Thrones", "Crisis in six scenes", "Batman", "Terms of endearment"));
