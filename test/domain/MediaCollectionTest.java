@@ -1,10 +1,9 @@
 package domain;
 
+import exceptions.FileNotLoadedException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,18 +19,14 @@ class MediaCollectionTest {
     void setUp() {
         try {
             testCollection = new MediaList();
-        } catch (IOException e) {
-            fail("testCollection could not be instantiated");
+        } catch (FileNotLoadedException e) {
+            fail(e.getMessage());
         }
     }
 
     @AfterEach
     void tearDown() {
         testCollection = null;
-    }
-
-    @Test
-    void sortByGenre() {
     }
 
     @Test

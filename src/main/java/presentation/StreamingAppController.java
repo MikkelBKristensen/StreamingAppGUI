@@ -137,7 +137,6 @@ public class StreamingAppController implements Initializable {
             }
         }
     };
-
     EventHandler<ActionEvent> genreComboBoxHandler = new EventHandler<>() {
         @Override
         public void handle(ActionEvent actionEvent) {

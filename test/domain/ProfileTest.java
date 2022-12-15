@@ -80,7 +80,7 @@ public class ProfileTest {
         try {
             testProfile.setName(randomName);
         } catch (FileNotSavedException e) {
-            throw new RuntimeException(e);
+            fail(e.getMessage());
         }
 
         try {
